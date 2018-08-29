@@ -30,7 +30,8 @@ Rectangle {
   property FeaturelistExtentController extentController
 
   signal statusIndicatorClicked
-  signal editButtonClicked
+  signal editAttributesButtonClicked
+  signal editGeometryButtonClicked
   signal save
   signal cancel
 
@@ -158,6 +159,42 @@ Rectangle {
   }
 
   Button {
+    id: editGeomButton
+
+    property bool readOnly: false
+
+    visible: stateMachine.state === "digitize"
+
+    anchors.right: editButton.left
+
+    iconSource: Style.getThemeIcon( "ic_create_white_24dp" )
+
+    width: ( parent.state == "Navigation" && !readOnly ? 48*dp : 0 )
+    height: 48*dp
+    clip: true
+
+    onClicked: {
+      extentController.zoomToSelected(true)
+      toolBar.editGeometryButtonClicked()
+    }
+
+    Behavior on width {
+      PropertyAnimation {
+        easing.type: Easing.InQuart
+      }
+    }
+
+    Connections {
+      target: selection
+
+      onSelectionChanged:
+      {
+        editGeomButton.readOnly = selection.selectedLayer.readOnly
+      }
+    }
+  }
+
+  Button {
     id: editButton
 
     property bool readOnly: false
@@ -171,7 +208,7 @@ Rectangle {
     iconSource: Style.getThemeIcon( "ic_create_white_24dp" )
 
     onClicked: {
-      toolBar.editButtonClicked()
+      toolBar.editAttributesButtonClicked()
     }
 
     Behavior on width {

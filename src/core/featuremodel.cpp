@@ -17,6 +17,7 @@
 
 #include "featuremodel.h"
 #include "expressioncontextutils.h"
+#include "vertexmodel.h"
 
 #include <qgsmessagelog.h>
 #include <qgsvectorlayer.h>
@@ -60,6 +61,20 @@ void FeatureModel::setCurrentLayer( QgsVectorLayer* layer )
 QgsVectorLayer* FeatureModel::layer() const
 {
   return mLayer;
+}
+
+VertexModel *FeatureModel::vertexModel()
+{
+  return mVertexModel;
+}
+
+void FeatureModel::setVertexModel( VertexModel *model )
+{
+  if ( model== mVertexModel )
+    return;
+
+  mVertexModel = model;
+  emit vertexModelChanged();
 }
 
 QgsFeature FeatureModel::feature() const
@@ -222,7 +237,7 @@ void FeatureModel::resetAttributes()
           QgsMessageLog::logMessage( tr( "Default value expression for %1:%2 has evaluation error: %3" ).arg( mLayer->name(), fields.at( i ).name(), exp.evalErrorString() ), QStringLiteral( "QField" ) );
 
 
-        mFeature.setAttribute( i , value );
+        mFeature.setAttribute( i, value );
       }
       else
       {
@@ -294,6 +309,14 @@ void FeatureModel::setPositionSourceName( const QString& positionSourceName )
 
   mPositionSource.reset( QGeoPositionInfoSource::createSource( positionSourceName, this ) );
   emit positionSourceChanged();
+}
+
+void FeatureModel::applyVertexModelToGeometry()
+{
+  if ( !mVertexModel )
+    return;
+
+  mFeature.setGeometry( mVertexModel->geometry() );
 }
 
 QVector<bool> FeatureModel::rememberedAttributes() const

@@ -49,12 +49,12 @@ Item {
       if ( snappingResult.isValid )
       {
         snappedCoordinate = snappingResult.point
-        snappedPoint = mapSettings.coordinateToScreen(snappedCoordinate)
+        snappedPoint = mapSettings.coordinateToScreen( snappedCoordinate )
       }
       else
       {
         snappedPoint = inputCoordinate
-        snappedCoordinate = mapSettings.screenToCoordinate(snappedPoint)
+        snappedCoordinate = mapSettings.screenToCoordinate( snappedPoint )
       }
     }
   }

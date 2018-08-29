@@ -22,15 +22,6 @@ android {
   INCLUDEPATH += $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH$$/include/qgis
   LIBS += $${OSGEO4A_STAGE_DIR}/$$ANDROID_TARGET_ARCH$$/lib/libqgis_core.so
 
-  system( mkdir -p $$shadowed($$PWD)/tmp )
-  CURRENT_PATH = $$shadowed($$PWD)
-  system( "cd $$QGIS_INSTALL_PATH$$; rm $$shadowed($$PWD)/tmp/assets.zip; zip -r $$shadowed($$PWD)/tmp/assets.zip share/resources/ share/svg/; cd $$CURRENT_PATH$$" )
-  qgis_assets.path = /assets
-  qgis_assets.files = "$$shadowed($$PWD)/tmp/assets.zip"
-  INSTALLS += qgis_assets
-  qgis_providers.path = /libs/$$ANDROID_TARGET_ARCH$$
-  qgis_providers.files = $$files( $$OSGEO4A_DIR/$$ANDROID_TARGET_ARCH$$/lib*provider.so )
-  INSTALLS += qgis_providers
 }
 
 macx {

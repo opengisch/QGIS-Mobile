@@ -190,6 +190,26 @@ ApplicationWindow {
       visible: positionSource.active
       location: positionSource.projectedPosition
     }
+
+    /* Rubberband for vertices  */
+    Item {
+      VertexRubberband {
+        id: vertexRubberband
+        model: vertexModel
+        mapSettings: mapCanvas.mapSettings
+      }
+
+      Rubberband {
+        id: editingRubberBand
+        vertexModel: vertexModel
+        mapSettings: mapCanvas.mapSettings
+        width: 2 * dp
+
+        transform: MapTransform {
+          mapSettings: mapCanvas.mapSettings
+        }
+      }
+    }
   }
 
   /**************************************************
@@ -457,7 +477,7 @@ ApplicationWindow {
     anchors.bottom: mapCanvas.bottom
     anchors.right: mapCanvas.right
 
-    visible: ( stateMachine.state === "digitize" && !dashBoard.currentLayer.readOnly )
+    visible: ( stateMachine.state === "digitize" && !dashBoard.currentLayer.readOnly && !geometryEditingToolbar.stateVisible )
     rubberbandModel: digitizingRubberband.model
 
     FeatureModel {
@@ -509,6 +529,19 @@ ApplicationWindow {
       }
     }
   }
+
+  GeometryEditingToolbar {
+    id: geometryEditingToolbar
+
+    featureModel: geometryEditingFeature
+    mapSettings: mapCanvas.mapSettings
+
+    anchors.bottom: mapCanvas.bottom
+    anchors.right: mapCanvas.right
+
+    stateVisible: ( stateMachine.state === "digitize" && vertexModel.vertexCount > 0 )
+  }
+
 
   Controls.Menu {
     id: mainMenu
@@ -678,7 +711,7 @@ ApplicationWindow {
 
     anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
     border { color: "lightGray"; width: 1 }
-    allowDelete: stateMachine.state === "digitize"
+    allowEdit: stateMachine.state === "digitize"
     formViewWidthDivisor: qfieldSettings.fullScreenIdentifyView ? 1 : 3
 
     model: MultiFeatureListModel {}
@@ -690,6 +723,15 @@ ApplicationWindow {
     selectionColor: "#ff7777"
 
     onShowMessage: displayToast(message)
+
+    onEditGeometry: {
+      vertexModel.setGeometry( featureForm.selection.selectedFeature.geometry,
+                               featureForm.selection.selectedLayer.crs )
+      geometryEditingFeature.currentLayer = featureForm.selection.selectedLayer
+      geometryEditingFeature.feature = featureForm.selection.selectedFeature
+
+      featureForm.state = "Hidden"
+    }
 
     Component.onCompleted: focusstack.addFocusTaker( this )
 
@@ -1059,5 +1101,19 @@ ApplicationWindow {
     onTriggered: {
         alreadyCloseRequested = false
     }
+  }
+
+  // ! MODELS !
+  FeatureModel {
+    id: geometryEditingFeature
+    currentLayer: null
+    positionSourceName: positionSource.name
+    vertexModel: vertexModel
+  }
+
+  VertexModel {
+      id: vertexModel
+      currentPoint: coordinateLocator.currentCoordinate
+      mapSettings: mapCanvas.mapSettings
   }
 }

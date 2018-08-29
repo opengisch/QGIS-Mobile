@@ -48,7 +48,7 @@ class QgisMobileapp : public QQmlApplicationEngine
     Q_OBJECT
   public:
     QgisMobileapp( QgsApplication *app , QObject* parent = nullptr );
-    ~QgisMobileapp();
+    ~QgisMobileapp() override;
 
     /**
      * When called loads the project file found at path.

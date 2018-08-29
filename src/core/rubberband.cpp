@@ -14,6 +14,8 @@
  *                                                                         *
  ***************************************************************************/
 
+
+#include "vertexmodel.h"
 #include "rubberband.h"
 
 #include "rubberbandmodel.h"
@@ -28,26 +30,70 @@ Rubberband::Rubberband( QQuickItem* parent )
 
 RubberbandModel* Rubberband::model() const
 {
-  return mModel;
+  return mRubberbandModel;
 }
 
 void Rubberband::setModel( RubberbandModel* model )
 {
-  if ( mModel == model )
+  if ( model )
+    setVertexModel( nullptr );
+
+  if ( mRubberbandModel == model )
     return;
 
-  mModel = model;
+  if ( mRubberbandModel )
+  {
+    disconnect( mRubberbandModel, &RubberbandModel::vertexChanged, this, &Rubberband::markDirty );
+    disconnect( mRubberbandModel, &RubberbandModel::verticesRemoved, this, &Rubberband::markDirty );
+    disconnect( mRubberbandModel, &RubberbandModel::verticesInserted, this, &Rubberband::markDirty );
+  }
 
-  // TODO connect to changes
 
-  connect( mModel, &RubberbandModel::vertexChanged, this, &Rubberband::markDirty );
-  connect( mModel, &RubberbandModel::verticesRemoved, this, &Rubberband::markDirty );
-  connect( mModel, &RubberbandModel::verticesInserted, this, &Rubberband::markDirty );
+  mRubberbandModel = model;
+
+  if ( mRubberbandModel )
+  {
+    connect( mRubberbandModel, &RubberbandModel::vertexChanged, this, &Rubberband::markDirty );
+    connect( mRubberbandModel, &RubberbandModel::verticesRemoved, this, &Rubberband::markDirty );
+    connect( mRubberbandModel, &RubberbandModel::verticesInserted, this, &Rubberband::markDirty );
+  }
 
   markDirty();
 
   emit modelChanged();
 }
+
+VertexModel* Rubberband::vertexModel() const
+{
+  return mVertexModel;
+}
+
+void Rubberband::setVertexModel( VertexModel* model )
+{
+  if ( model )
+    setModel( nullptr );
+
+  if ( mVertexModel == model )
+    return;
+
+  if ( mVertexModel )
+  {
+    disconnect( mVertexModel, &VertexModel::dataChanged, this, &Rubberband::markDirty );
+  }
+
+  mVertexModel = model;
+
+  if ( mVertexModel )
+  {
+      connect( mVertexModel, &VertexModel::dataChanged, this, &Rubberband::markDirty );
+      connect( mVertexModel, &VertexModel::vertexCountChanged, this, &Rubberband::markDirty );
+  }
+
+  markDirty();
+
+  emit vertexModelChanged();
+}
+
 
 MapSettings* Rubberband::mapSettings() const
 {
@@ -73,26 +119,46 @@ void Rubberband::markDirty()
 
 QSGNode* Rubberband::updatePaintNode( QSGNode* n, QQuickItem::UpdatePaintNodeData* )
 {
-  if ( mDirty && mModel )
+  if ( mDirty )
   {
     delete n;
     n = new QSGNode;
 
-    if ( !mModel->isEmpty() )
+    bool frozen = mRubberbandModel && mRubberbandModel->frozen();
+
+    QVector<QgsPoint> allVertices = QVector<QgsPoint>();
+    QVector<QgsPoint> allButCurrentVertices = QVector<QgsPoint>();
+    QgsWkbTypes::GeometryType geomType = QgsWkbTypes::LineGeometry;
+
+    if ( mRubberbandModel && !mRubberbandModel->isEmpty() )
     {
-      SGRubberband* rb = new SGRubberband( mModel->flatVertices(), mModel->geometryType(), mColor, mWidth );
+      allVertices = mRubberbandModel->flatVertices();
+      geomType =mRubberbandModel->geometryType();
+      if ( frozen )
+        allButCurrentVertices = mRubberbandModel->flatVertices( true );
+    }
+    else if ( mVertexModel && mVertexModel->vertexCount() > 0 )
+    {
+      allVertices = mVertexModel->flatVertices();
+      geomType = mVertexModel->geometryType();
+    }
+
+    if ( !allVertices.isEmpty() )
+    {
+      SGRubberband* rb = new SGRubberband( allVertices, geomType, mColor, mWidth );
       rb->setFlag( QSGNode::OwnedByParent );
       n->appendChildNode( rb );
 
-      if ( !mModel->frozen() )
+      if ( frozen )
       {
-        SGRubberband* rbCurrentPoint = new SGRubberband( mModel->flatVertices( true ), mModel->geometryType(), mColorCurrentPoint, mWidthCurrentPoint );
+        SGRubberband* rbCurrentPoint = new SGRubberband( allButCurrentVertices, geomType, mColorCurrentPoint, mWidthCurrentPoint );
         rbCurrentPoint->setFlag( QSGNode::OwnedByParent );
         n->appendChildNode( rbCurrentPoint );
       }
     }
   }
 
+  mDirty = false;
   return n;
 }
 

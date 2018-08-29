@@ -82,6 +82,7 @@ QHash<int, QByteArray> MultiFeatureListModel::roleNames() const
   roleNames[LayerNameRole] = "layerName";
   roleNames[LayerRole] = "currentLayer";
   roleNames[DeleteFeatureRole] = "deleteFeatureCapability";
+  roleNames[EditGeometryRole] = "editGeometryCapability";
 
   return roleNames;
 }
@@ -147,8 +148,10 @@ QVariant MultiFeatureListModel::data( const QModelIndex& index, int role ) const
       return QVariant::fromValue<QgsVectorLayer*>( feature->first );
 
     case DeleteFeatureRole:
-      bool a = !feature->first->readOnly() && ( feature->first->dataProvider()->capabilities() & QgsVectorDataProvider::DeleteFeatures );
-      return a;
+      return !feature->first->readOnly() && ( feature->first->dataProvider()->capabilities() & QgsVectorDataProvider::DeleteFeatures );
+
+    case EditGeometryRole:
+      return !feature->first->readOnly() && ( feature->first->dataProvider()->capabilities() & QgsVectorDataProvider::ChangeGeometries );
   }
 
   return QVariant();

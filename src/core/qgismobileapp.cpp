@@ -73,6 +73,8 @@
 #include "distancearea.h"
 #include "coordinatetransformer.h"
 #include "printlayoutlistmodel.h"
+#include "vertexmodel.h"
+#include "maptoscreen.h"
 
 QgisMobileapp::QgisMobileapp( QgsApplication* app, QObject* parent )
   : QQmlApplicationEngine( parent )
@@ -164,6 +166,8 @@ void QgisMobileapp::initDeclarative()
   qmlRegisterType<CoordinateTransformer>( "org.qfield", 1, 0, "CoordinateTransformer" );
   qmlRegisterType<FocusStack>( "org.qfield", 1, 0, "FocusStack" );
   qmlRegisterType<PrintLayoutListModel>( "org.qfield", 1, 0, "PrintLayoutListModel");
+  qmlRegisterType<VertexModel>( "org.qfield", 1, 0, "VertexModel" );
+  qmlRegisterType<MapToScreen>( "org.qfield", 1, 0, "MapToScreen" );
 
   qmlRegisterUncreatableType<AppInterface>( "org.qgis", 1, 0, "QgisInterface", "QgisInterface is only provided by the environment and cannot be created ad-hoc" );
   qmlRegisterUncreatableType<Settings>( "org.qgis", 1, 0, "Settings", "" );

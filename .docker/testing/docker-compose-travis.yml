@@ -1,0 +1,9 @@
+version: '3'
+services:
+  qgis:
+    build:
+      context: ../..
+      dockerfile: ./.docker/testing/Dockerfile
+    tty: true
+    volumes:
+      - ${TRAVIS_BUILD_DIR}:/usr/src

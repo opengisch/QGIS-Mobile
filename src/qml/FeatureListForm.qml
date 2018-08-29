@@ -30,10 +30,11 @@ Rectangle {
   property MapSettings mapSettings
   property color selectionColor
   property alias model: globalFeaturesList.model
-  property bool allowDelete
+  property bool allowEdit
   property int formViewWidthDivisor
 
   signal showMessage(string message)
+  signal editGeometry
 
   states: [
     State {
@@ -183,22 +184,26 @@ Rectangle {
         }
       }
 
-      Button {
-        id: deleteButton
-
-        width: 48*dp
-        height: 48*dp
-
-        visible: deleteFeatureCapability && allowDelete
-
+      Row
+      {
+        id: editRow
         anchors { top: parent.top; right: parent.right }
 
-        iconSource: Style.getThemeIcon( "ic_delete_forever_white_24dp" )
+        Button {
+          id: deleteButton
 
-        onClicked: {
-          deleteDialog.currentLayer = currentLayer
-          deleteDialog.featureId = featureId
-          deleteDialog.visible = true
+          width: 48*dp
+          height: 48*dp
+
+          visible: deleteFeatureCapability && allowEdit
+
+          iconSource: Style.getThemeIcon( "ic_delete_forever_white_24dp" )
+
+          onClicked: {
+            deleteDialog.currentLayer = currentLayer
+            deleteDialog.featureId = featureId
+            deleteDialog.visible = true
+          }
         }
       }
 
@@ -273,8 +278,12 @@ Rectangle {
       featureForm.state = "FeatureList"
     }
 
-    onEditButtonClicked: {
+    onEditAttributesButtonClicked: {
       featureForm.state = "FeatureFormEdit"
+    }
+
+    onEditGeometryButtonClicked: {
+      editGeometry()
     }
 
     onSave: {

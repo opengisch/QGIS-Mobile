@@ -27,20 +27,28 @@ fi
 
 set -e
 
-MY_ARTISTIC_STYLE_OPTIONS="\
---style=allman \
---preserve-date \
---indent-preprocessor \
---convert-tabs \
---indent=spaces=2 \
---indent-classes \
---indent-labels \
---indent-namespaces \
---indent-switches \
+MY_ARTISTIC_STYLE_OPTIONS=" \
+--preserve-date             \
+--indent-preprocessor       \
+--convert-tabs              \
+--indent=spaces=2           \
+--indent-classes            \
+--indent-labels             \
+--indent-namespaces         \
+--indent-switches           \
 --max-instatement-indent=40 \
 --min-conditional-indent=-1 \
---pad-paren-in \
---suffix=none"
+--suffix=none               \
+--break-after-logical       \
+--style=allman              \
+--align-pointer=name        \
+--align-reference=name      \
+--keep-one-line-statements  \
+--keep-one-line-blocks      \
+--pad-paren-in              \
+--pad-oper                  \
+--unpad-paren               \
+--pad-header"
 
 for f in "$@"; do
   case "$f" in

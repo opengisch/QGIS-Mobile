@@ -7,14 +7,10 @@ android {
   OSGEO4A_DIR = [insert path here]/OSGeo4A
 }
 !android {
-  # To build for a PC, you need Qt5 builds of QGIS, QWT and QScintilla
-  QGIS_INSTALL_PATH = [insert path here]/qgis/build-qt5/install
+  # By default we assume that QGIS has been installed to /usr
+  # This can be customized if QGIS has been installed to a different place.
+  QGIS_INSTALL_PATH = /usr
   
   # For Mac, this might be of the form
-  # QGIS_INSTALL_PATH = /usr/local/Cellar/qgis3-dev/2.99
-
-  # Add QWT and QScintilla custom paths if your distro only ships Qt4 versions
-  # and you had to build them manually for Qt5
-  QWT_DIR = [insert path here]/qwt-6.1/lib
-  QSCINTILLA_DIR = [insert path here]/QScintilla-gpl-2.8.4/Qt4Qt5
+  # QGIS_INSTALL_PATH = /usr/local/Cellar/qgis3/3.2
 }

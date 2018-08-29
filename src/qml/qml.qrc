@@ -32,5 +32,8 @@
         <file>LayerTreeItemProperties.qml</file>
         <file>ui/LayerTreeItemProperties.ui.qml</file>
         <file>QFieldCamera.qml</file>
+        <file>GeometryEditingToolbar.qml</file>
+        <file>VertexRubberband.qml</file>
+        <file>VisibiltyFadingRow.qml</file>
     </qresource>
 </RCC>

@@ -37,14 +37,14 @@ if [ -n "${KEYNAME}" ]; then
 	    --sign ${SOURCE_DIR}/keystore.p12 "${KEYNAME}" \
 	    --storepass "${STOREPASS}" \
 	    --keypass "${KEYPASS}" \
-	    --input ${BUILD_DIR}/src/android-libqfield.so-deployment-settings.json \
+        --input ${BUILD_DIR}/src/app/android-libqfield.so-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
 	    --android-platform ${ANDROID_NDK_PLATFORM} \
 	    --gradle
 else
     ${QT_ANDROID}/bin/androiddeployqt \
-	    --input ${BUILD_DIR}/src/android-libqfield.so-deployment-settings.json \
+        --input ${BUILD_DIR}/src/app/android-libqfield.so-deployment-settings.json \
 	    --output ${INSTALL_DIR} \
 	    --deployment bundled \
 	    --android-platform ${ANDROID_NDK_PLATFORM} \

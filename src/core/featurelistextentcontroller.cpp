@@ -18,10 +18,10 @@
 #include <qgsvectorlayer.h>
 #include <qgsgeometry.h>
 
-FeatureListExtentController::FeatureListExtentController( QObject* parent )
+FeatureListExtentController::FeatureListExtentController( QObject *parent )
   : QObject( parent )
 {
-  connect( this, &FeatureListExtentController::autoZoomChanged, this, &FeatureListExtentController::zoomToSelected );
+  connect( this, &FeatureListExtentController::autoZoomChanged, this, [ = ]() {this->zoomToSelected();} );
   connect( this, &FeatureListExtentController::modelChanged, this, &FeatureListExtentController::onModelChanged );
   connect( this, &FeatureListExtentController::selectionChanged, this, &FeatureListExtentController::onModelChanged );
 }
@@ -30,12 +30,12 @@ FeatureListExtentController::~FeatureListExtentController()
 {
 }
 
-void FeatureListExtentController::zoomToSelected() const
+void FeatureListExtentController::zoomToSelected( bool skipIfIntersects ) const
 {
   if ( mModel && mSelection && mMapSettings )
   {
     QgsFeature feat = mSelection->selectedFeature();
-    QgsVectorLayer* layer = mSelection->selectedLayer();
+    QgsVectorLayer *layer = mSelection->selectedLayer();
 
     QgsCoordinateTransform transf( layer->crs(), mMapSettings->destinationCrs(), mMapSettings->mapSettings().transformContext() );
     QgsGeometry geom( feat.geometry() );
@@ -43,14 +43,16 @@ void FeatureListExtentController::zoomToSelected() const
 
     if ( geom.type() == QgsWkbTypes::PointGeometry )
     {
-      mMapSettings->setCenter( QgsPoint( geom.asPoint() ) );
+      if ( !skipIfIntersects || !mMapSettings->extent().intersects( geom.boundingBox() ) )
+        mMapSettings->setCenter( QgsPoint( geom.asPoint() ) );
     }
     else
     {
       QgsRectangle featureExtent = geom.boundingBox();
       QgsRectangle bufferedExtent = featureExtent.buffered( qMax( featureExtent.width(), featureExtent.height() ) );
 
-      mMapSettings->setExtent( bufferedExtent );
+      if ( !skipIfIntersects || !mMapSettings->extent().intersects( bufferedExtent ) )
+        mMapSettings->setExtent( bufferedExtent );
     }
   }
 }

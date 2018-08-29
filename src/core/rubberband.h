@@ -19,6 +19,7 @@
 #include <QQuickItem>
 
 class RubberbandModel;
+class VertexModel;
 class MapSettings;
 
 class Rubberband : public QQuickItem
@@ -26,6 +27,7 @@ class Rubberband : public QQuickItem
     Q_OBJECT
 
     Q_PROPERTY( RubberbandModel* model READ model WRITE setModel NOTIFY modelChanged )
+    Q_PROPERTY( VertexModel* vertexModel READ vertexModel WRITE setVertexModel NOTIFY vertexModelChanged )
     Q_PROPERTY( MapSettings* mapSettings READ mapSettings WRITE setMapSettings NOTIFY mapSettingsChanged )
     //! Color of the main rubberband
     Q_PROPERTY( QColor color READ color WRITE setColor NOTIFY colorChanged )
@@ -41,6 +43,9 @@ class Rubberband : public QQuickItem
 
     RubberbandModel* model() const;
     void setModel( RubberbandModel* model );
+
+    VertexModel* vertexModel() const;
+    void setVertexModel( VertexModel* vertexModel );
 
     MapSettings* mapSettings() const;
     void setMapSettings( MapSettings* mapSettings );
@@ -67,6 +72,7 @@ class Rubberband : public QQuickItem
 
   signals:
     void modelChanged();
+    void vertexModelChanged();
     void mapSettingsChanged();
     //! \copydoc color
     void colorChanged();
@@ -84,7 +90,8 @@ class Rubberband : public QQuickItem
   private:
     QSGNode* updatePaintNode( QSGNode* n, QQuickItem::UpdatePaintNodeData* );
 
-    RubberbandModel* mModel = nullptr;
+    RubberbandModel* mRubberbandModel = nullptr;
+    VertexModel* mVertexModel = nullptr;
     MapSettings* mMapSettings;
     bool mDirty = false;
     QColor mColor = QColor( 192, 57, 43, 200 );

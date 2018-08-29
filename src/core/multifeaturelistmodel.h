@@ -37,7 +37,8 @@ class MultiFeatureListModel : public QAbstractItemModel
       FeatureRole,
       LayerNameRole,
       LayerRole,
-      DeleteFeatureRole
+      DeleteFeatureRole,
+      EditGeometryRole
     };
 
     explicit MultiFeatureListModel( QObject *parent = nullptr );

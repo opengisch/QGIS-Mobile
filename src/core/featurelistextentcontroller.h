@@ -26,17 +26,19 @@ class FeatureListExtentController : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY( MultiFeatureListModel* model MEMBER mModel NOTIFY modelChanged )
-    Q_PROPERTY( FeatureListModelSelection* selection MEMBER mSelection NOTIFY selectionChanged )
+    Q_PROPERTY( MultiFeatureListModel *model MEMBER mModel NOTIFY modelChanged )
+    Q_PROPERTY( FeatureListModelSelection *selection MEMBER mSelection NOTIFY selectionChanged )
     Q_PROPERTY( bool autoZoom MEMBER mAutoZoom NOTIFY autoZoomChanged )
-    Q_PROPERTY( MapSettings* mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
+    Q_PROPERTY( MapSettings *mapSettings MEMBER mMapSettings NOTIFY mapSettingsChanged )
 
   public:
-    FeatureListExtentController( QObject* parent = nullptr );
+    FeatureListExtentController( QObject *parent = nullptr );
     ~FeatureListExtentController();
 
   public slots:
-    void zoomToSelected() const;
+    //! zoom to the selected features.
+    //! If \a skipIfIntersects is true, no change will be applied if bounding box intersects with canvas extent
+    void zoomToSelected( bool skipIfIntersects = false ) const;
 
   signals:
     void autoZoomChanged();
@@ -49,9 +51,9 @@ class FeatureListExtentController : public QObject
     void onCurrentSelectionChanged();
 
   private:
-    MultiFeatureListModel* mModel = nullptr;
-    FeatureListModelSelection* mSelection = nullptr;
-    MapSettings* mMapSettings = nullptr;
+    MultiFeatureListModel *mModel = nullptr;
+    FeatureListModelSelection *mSelection = nullptr;
+    MapSettings *mMapSettings = nullptr;
     bool mAutoZoom = false;
 };
 

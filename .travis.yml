@@ -1,4 +1,4 @@
-language: python
+language: android
 python:
   - 3.5
 rvm:
@@ -18,22 +18,64 @@ before_install:
   - gem update --system
   - gem --version
 
-script:
-  - export QFIELD_SDK_VERSION=20180815
-  - echo "travis_fold:start:docker-pull"
-  - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
-  - echo "travis_fold:end:docker-pull"
-  - docker run -v $(pwd):/usr/src/qfield -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "KEYPASS=${KEYPASS}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/qfield/scripts/docker-build.sh
-  - ./scripts/upload-artifacts.sh
-
 jobs:
   include:
+    # Build and test on linux
+    - stage: test
+      script:
+        - echo "travis_fold:start:build\n$(tput bold)Build QField $(tput sgr0)"
+        - docker-compose -f .docker/testing/docker-compose-travis.yml run qgis /usr/src/.docker/testing/build-test.sh
+      if: type = pull_request OR tag IS present OR branch = master
+
+    # ARM test with emulator
     - stage: test
       env:
         - ARCH=armv7
+      if: type = pull_request OR tag IS present OR branch = master
+      android:
+        components:
+          - sys-img-armeabi-v7a-android-24
+      jdk: oraclejdk8
+      install:
+        - echo y | android update sdk -a --no-ui --filter android-24
+        - echo y | android update sdk -a --no-ui --filter sys-img-armeabi-v7a-android-24
+        - android list targets | grep -E '^id:' | awk -F '"' '{$1=""; print $2}' # list all targets
+        - echo no | android create avd --force -n test -t android-24 --abi armeabi-v7a
+        - emulator -avd test -no-skin -no-window &
+        - android-wait-for-emulator
+        - adb shell input keyevent 82 &
+        - adb wait-for-device get-serialno
+        - sleep 100
+        - echo y |adb devices
+          #      before_script:
+          #        - android list targets
+          #        - echo no | android create avd --force -n test -t android-26 --abi armeabi-v7a
+          #        - emulator -avd test -no-audio -no-window &
+          #        - android-wait-for-emulator
+          #        - adb shell input keyevent 82 &
+      script:
+        - export QFIELD_SDK_VERSION=20180815
+        - echo "travis_fold:start:docker-pull"
+        - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
+        - echo "travis_fold:end:docker-pull"
+        - docker run -v $(pwd):/usr/src/qfield -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "KEYPASS=${KEYPASS}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/qfield/scripts/docker-build.sh
+        - ./scripts/upload-artifacts.sh
+        - adb install build-${ARCH}/out/build/outputs/apk/out-release-signed.apk
+
+    # x86 Android build
     - stage: test
       env:
         - ARCH=x86
+      if: type = pull_request OR tag IS present OR branch = master
+      script:
+        - export QFIELD_SDK_VERSION=20180815
+        - echo "travis_fold:start:docker-pull"
+        - docker pull opengisch/qfield-sdk:${QFIELD_SDK_VERSION}
+        - echo "travis_fold:end:docker-pull"
+        - docker run -v $(pwd):/usr/src/qfield -e "BUILD_FOLDER=build-${ARCH}" -e "ARCH=${ARCH}" -e "STOREPASS=${STOREPASS}" -e "KEYNAME=${KEYNAME}" -e "KEYPASS=${KEYPASS}" opengisch/qfield-sdk:${QFIELD_SDK_VERSION} /usr/src/qfield/scripts/docker-build.sh
+        - ./scripts/upload-artifacts.sh
+
+    # Deploy
     - stage: deploy
       if: type = pull_request OR tag IS present
       script:

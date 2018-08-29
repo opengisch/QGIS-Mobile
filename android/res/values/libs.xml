@@ -17,13 +17,12 @@
       <item>gdal</item>
       <item>proj</item>
       <item>spatialindex</item>
-      <item>qscintilla2</item>
-      <item>qwt</item>
       <item>pq</item>
       <item>spatialite</item>
       <item>qca-qt5</item>
       <item>qgis_core</item>
       <item>qgis_gui</item>
+      <item>zip</item>
     </array>
 
     <!-- The following is handled automatically by the deployment tool. It should
