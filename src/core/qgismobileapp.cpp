@@ -504,6 +504,9 @@ void QgisMobileapp::onAfterFirstRendering()
   // This should get triggered exactly once, so we disconnect it right away
   // disconnect( this, &QgisMobileapp::afterRendering, this, &QgisMobileapp::onAfterFirstRendering );
 
+  qFatal( "boom" );
+  QObject *obj = nullptr;
+  obj->deleteLater();
   if ( mFirstRenderingFlag )
   {
     if ( qApp->arguments().count() > 1 )
@@ -626,10 +629,10 @@ void QgisMobileapp::readProjectFile()
       {
         for ( const QString &sublayerInfo : sublayers )
         {
-          const QStringList info =sublayerInfo.split( QgsDataProvider::sublayerSeparator() );
+          const QStringList info = sublayerInfo.split( QgsDataProvider::sublayerSeparator() );
           QgsVectorLayer *sublayer = new QgsVectorLayer( QStringLiteral( "%1|layerid=%2" ).arg( mProjectFilePath, info.at( 0 ) ),
-                                                        QStringLiteral( "%1: %2" ).arg( mProjectFileName, info.at( 1 ) ),
-                                                        QLatin1String( "ogr" ), options );
+              QStringLiteral( "%1: %2" ).arg( mProjectFileName, info.at( 1 ) ),
+              QLatin1String( "ogr" ), options );
           if ( sublayer->isValid() )
           {
             if ( sublayer->crs().isValid() )
@@ -671,7 +674,7 @@ void QgisMobileapp::readProjectFile()
         vectorLayers << layer;
       }
 
-      for( QgsMapLayer *l : vectorLayers )
+      for ( QgsMapLayer *l : vectorLayers )
       {
         QgsVectorLayer *vlayer = qobject_cast< QgsVectorLayer * >( l );
         QgsSymbol *symbol = FeatureUtils::defaultSymbol( vlayer );
@@ -684,20 +687,22 @@ void QgisMobileapp::readProjectFile()
 
       if ( vectorLayers.size() > 1 )
       {
-        std::sort( vectorLayers.begin(), vectorLayers.end(), []( QgsMapLayer *a, QgsMapLayer *b ) {
-         QgsVectorLayer *alayer = qobject_cast< QgsVectorLayer * >( a );
-         QgsVectorLayer *blayer = qobject_cast< QgsVectorLayer * >( b );
-         if ( alayer->geometryType() == QgsWkbTypes::PointGeometry && blayer->geometryType() != QgsWkbTypes::PointGeometry )
-         {
-           return true;
-         } else if ( alayer->geometryType() == QgsWkbTypes::LineGeometry && blayer->geometryType() == QgsWkbTypes::PolygonGeometry )
-         {
-           return true;
-         }
-         else
-         {
-           return false;
-         }
+        std::sort( vectorLayers.begin(), vectorLayers.end(), []( QgsMapLayer * a, QgsMapLayer * b )
+        {
+          QgsVectorLayer *alayer = qobject_cast< QgsVectorLayer * >( a );
+          QgsVectorLayer *blayer = qobject_cast< QgsVectorLayer * >( b );
+          if ( alayer->geometryType() == QgsWkbTypes::PointGeometry && blayer->geometryType() != QgsWkbTypes::PointGeometry )
+          {
+            return true;
+          }
+          else if ( alayer->geometryType() == QgsWkbTypes::LineGeometry && blayer->geometryType() == QgsWkbTypes::PolygonGeometry )
+          {
+            return true;
+          }
+          else
+          {
+            return false;
+          }
         } );
       }
     }
@@ -708,7 +713,8 @@ void QgisMobileapp::readProjectFile()
   }
 
   // Load raster dataset
-  if ( SUPPORTED_RASTER_EXTENSIONS.contains( suffix ) ) {
+  if ( SUPPORTED_RASTER_EXTENSIONS.contains( suffix ) )
+  {
     QgsRasterLayer *layer = new QgsRasterLayer( mProjectFilePath, mProjectFileName, QLatin1String( "gdal" ) );
     if ( layer->isValid() )
     {
@@ -717,10 +723,10 @@ void QgisMobileapp::readProjectFile()
       {
         for ( const QString &sublayerInfo : sublayers )
         {
-          const QStringList info =sublayerInfo.split( QgsDataProvider::sublayerSeparator() );
+          const QStringList info = sublayerInfo.split( QgsDataProvider::sublayerSeparator() );
           QgsRasterLayer *sublayer = new QgsRasterLayer( QStringLiteral( "%1|layerid=%2" ).arg( mProjectFilePath, info.at( 0 ) ),
-                                                        QStringLiteral( "%1: %2" ).arg( mProjectFileName, info.at( 1 ) ),
-                                                        QLatin1String( "gdal" ) );
+              QStringLiteral( "%1: %2" ).arg( mProjectFileName, info.at( 1 ) ),
+              QLatin1String( "gdal" ) );
           if ( sublayer->isValid() )
           {
             if ( sublayer->crs().isValid() )
@@ -765,7 +771,7 @@ void QgisMobileapp::readProjectFile()
       // If the raster size is reasonably small, apply nicer resampling settings
       if ( fi.size() < 50000000 )
       {
-        for( QgsMapLayer *l : rasterLayers )
+        for ( QgsMapLayer *l : rasterLayers )
         {
           QgsRasterLayer *rlayer = qobject_cast< QgsRasterLayer * >( l );
           rlayer->resampleFilter()->setZoomedInResampler( new QgsBilinearRasterResampler() );

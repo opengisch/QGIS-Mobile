@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1080011597948",
+    "project_id": "opengisch-qfield",
+    "storage_bucket": "opengisch-qfield.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1080011597948:android:cbae6ba6e25a17293781f9",
+        "android_client_info": {
+          "package_name": "ch.opengis.qfield"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1080011597948-5qd2r27vdd7l1js7t04qmpp5hsa6tp6t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBz6EhrnnMYcxo7DNEw3ds5AYtH2d65UGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1080011597948-5qd2r27vdd7l1js7t04qmpp5hsa6tp6t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

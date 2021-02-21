@@ -147,4 +147,7 @@ else
       --gradle
 fi
 
+cd android-build
+./gradlew --no-daemon uploadCrashlyticsSymbolFileRelease
+
 popd

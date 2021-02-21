@@ -10,6 +10,7 @@ groupadd -g "$GROUP_ID" qfield
 useradd --home-dir /io/data --shell /bin/bash --uid "$USER_ID" --gid "$GROUP_ID" "$USER_NAME"
 mkdir -p /io/data
 chown $USER_ID:$GROUP_ID /io/data
-chown -R $USER_ID:$GROUP_ID /opt
+chown $USER_ID:$GROUP_ID /opt/android-sdk
+chown $USER_ID:$GROUP_ID /opt/android-sdk/*
 
 su "$USER_NAME" -c ${DIR}/docker-build.sh

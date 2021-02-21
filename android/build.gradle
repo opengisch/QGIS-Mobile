@@ -7,6 +7,8 @@ buildscript {
 
     dependencies {
         classpath 'com.android.tools.build:gradle:3.5.0'
+        classpath 'com.google.gms:google-services:4.3.5'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.4.1'
     }
 }
 
@@ -24,13 +26,22 @@ allprojects {
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
 
 def outputPathName = "some.apk"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:support-v4:26.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
 
+    // Import the BoM for the Firebase platform
+    implementation platform('com.google.firebase:firebase-bom:26.4.0')
+
+    // Declare the dependencies for the Crashlytics and Analytics libraries
+    // When using the BoM, you don't specify versions in Firebase library dependencies
+    implementation 'com.google.firebase:firebase-crashlytics-ndk'
+    implementation 'com.google.firebase:firebase-analytics'
 }
 
 android {
@@ -48,7 +59,6 @@ android {
      *******************************************************/
 
     compileSdkVersion androidCompileSdkVersion.toInteger()
-
 
     /*
     // see https://bugreports.qt.io/browse/QTBUG-69755
@@ -76,5 +86,15 @@ android {
     lintOptions {
         abortOnError false
         disable 'MissingTranslation'
+    }
+
+    buildTypes {
+        release {
+            firebaseCrashlytics {
+                nativeSymbolUploadEnabled true
+                strippedNativeLibsDir "$buildDir/intermediates/stripped_native_libs/release/out/lib"
+                unstrippedNativeLibsDir "$buildDir/../libs"
+            }
+        }
     }
 }

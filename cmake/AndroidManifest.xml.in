@@ -200,7 +200,7 @@
     <activity android:name="ch.opengis.@APP_PACKAGE_NAME@.QFieldOpenExternallyActivity" />
 
     <provider
-        android:name="android.support.v4.content.FileProvider"
+        android:name="androidx.core.content.FileProvider"
         android:authorities="ch.opengis.@APP_PACKAGE_NAME@.fileprovider"
         android:exported="false"
         android:grantUriPermissions="true">
