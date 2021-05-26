@@ -128,16 +128,17 @@ jobs:
           sudo apt clean
           df -h
 
-      - name: Install deps
+      - name: Install linux deps
         if: ${{ matrix.triplet == 'x64-linux' }}
         run: |
           sudo apt-get install -y gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
 
-      - name: Install deps
+      - name: Install osx deps
         if: ${{ matrix.triplet == 'x64-osx' }}
         run: |
-          brew install automake bison
+          brew install automake bison flex
           echo $(brew --prefix bison)/bin >> $GITHUB_PATH
+          echo $(brew --prefix flex)/bin >> $GITHUB_PATH
           sudo xcode-select -s /Applications/Xcode_12.app/Contents/Developer
 
       - name: Install dependencies and generate project files
