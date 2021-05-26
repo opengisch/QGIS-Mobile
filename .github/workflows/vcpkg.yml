@@ -1,0 +1,180 @@
+---
+name: 🎁 Packge with vcpkg
+on:
+  push:
+    branches:
+      - master
+      - release-**
+      - vcpkg-generic
+  pull_request:
+  release:
+    types: ['prereleased', 'released']
+
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: 'windows-2019'
+            triplet: 'x64-windows'
+            mono: ''
+            build-type: 'Release'
+            vcpkg-root: 'C:'
+
+#          - os: 'windows-2019'
+#            triplet: 'x64-uwp'
+#            mono: ''
+#            build-type: 'Release'
+#            vcpkg-root: 'C:'
+
+#          - os: 'ubuntu-18.04'
+#            triplet: 'x64-linux'
+#            # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
+#            mono: 'mono'
+#            build-type: 'Release'
+#            vcpkg-root: '/home/runner'
+
+          - os: 'macos-10.15'
+            triplet: 'x64-osx'
+            # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
+            mono: 'mono'
+            build-type: 'Release'
+            vcpkg-root: '/Users/runner'
+
+    env:
+      TX_TOKEN: ${{ secrets.TX_TOKEN }}
+      VCPKG_BINARY_SOURCES: 'clear;nuget,GitHub,readwrite'
+      VCPKG_ROOT: ${{ matrix.vcpkg-root }}/src
+      CMAKE_BUILD_DIR: ${{ matrix.vcpkg-root}}/builddir
+      VCPKG_DEFAULT_BINARY_CACHE: ${{ matrix.vcpkg-root }}/vcpkg_cache
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Install CMake and Ninja
+        uses: lukka/get-cmake@latest
+
+      - name: Clone vcpkg
+        shell: bash
+        run: |
+          VCPKG_SHA=$(head -1 .git/modules/vcpkg/HEAD)
+          mkdir "${{ env.VCPKG_DEFAULT_BINARY_CACHE }}"
+          mkdir "${{ env.VCPKG_ROOT }}"
+          cd "${{ env.VCPKG_ROOT }}"
+          git init
+          git remote add origin https://github.com/opengisch/vcpkg.git
+          git fetch --depth 1 origin $VCPKG_SHA
+          git checkout FETCH_HEAD
+
+      - name: Cache vcpkg
+        id: cache-vcpkg-tool
+        uses: pat-s/always-upload-cache@v2.1.5
+        with:
+          path: |
+            ${{ env.VCPKG_ROOT }}/vcpkg
+            ${{ env.VCPKG_ROOT }}/vcpkg.exe
+          key: ${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
+
+      - name: Bootstrap vcpkg
+        if: steps.cache-vcpkg-tool.outputs.cache-hit != 'true'
+        shell: bash
+        working-directory: ${{ env.VCPKG_ROOT }}
+        run: |
+          if grep -qEi "(Microsoft|WSL)" /proc/version &> /dev/null ; then
+            ./bootstrap-vcpkg.bat
+          else
+            ./bootstrap-vcpkg.sh
+          fi
+
+      - name: Setup NuGet Credentials
+        shell: bash
+        run: |
+          ${{ matrix.mono }} $(${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1) \
+          sources add \
+          -source "https://nuget.pkg.github.com/opengisch/index.json" \
+          -storepasswordincleartext \
+          -name "GitHub" \
+          -username "opengisch" \
+          -password "${{ secrets.GITHUB_TOKEN }}"
+
+          ${{ matrix.mono }} $(${{ env.VCPKG_ROOT }}/vcpkg fetch nuget | tail -n 1) \
+          setapikey ${{ secrets.GITHUB_TOKEN }} -src "https://nuget.pkg.github.com/opengisch/index.json"
+
+      - uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Free additional space
+        if: ${{ matrix.triplet == 'x64-linux' }}
+        run: |
+          df -h
+          rm -rf /usr/share/dotnet/sdk
+          rm -rf /usr/share/rust
+          rm -rf /usr/share/swift
+          sudo apt remove llvm-* ghc-* google-chrome-* dotnet-sdk-* azure-cli google-cloud-sdk adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot google-chrome-stable firefox
+          dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
+          du -a /usr/share | sort -n -r | head -n 10
+          du -a /usr/local/share | sort -n -r | head -n 10
+          df -h
+          sudo apt clean
+          df -h
+
+      - name: Install deps
+        if: ${{ matrix.triplet == 'x64-linux' }}
+        run: |
+          sudo apt-get install -y gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
+
+      - name: Install deps
+        if: ${{ matrix.triplet == 'x64-osx' }}
+        run: |
+          brew install automake bison
+          echo $(brew --prefix bison)/bin >> $GITHUB_PATH
+          sudo xcode-select -s /Applications/Xcode_12.app/Contents/Developer
+
+      - name: Install dependencies and generate project files
+        run: |
+          # ${{ env.VCPKG_ROOT }}/vcpkg install --debug qt5-declarative
+          cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS="${{ github.workspace }}/vcpkg/overlay" -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
+
+      - name: Upload Build Logs
+        uses: actions/upload-artifact@v2
+        if: always()
+        with:
+          name: build-logs
+          path: ${{ env.VCPKG_ROOT }}/buildtrees/**/*.log
+
+      - name: 🌍 Pull Translations
+        shell: bash
+        run: |
+          if [[ -z "${TX_TOKEN}" ]]; then
+            echo "TX_TOKEN not set, skip tx pull"
+          else
+            pip install transifex-client
+            pushd "${{ env.VCPKG_ROOT }}"
+            ./vcpkg integrate install
+            popd
+            ./scripts/ci/pull_translations.sh
+          fi
+
+      - name: Build
+        run: |
+          cmake --build "${{ env.CMAKE_BUILD_DIR }}"
+
+      # - name: Test
+      #  run: |
+      #    cd "${{ env.CMAKE_BUILD_DIR }}"
+      #    ctest -V
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: "QField-dev-${{ matrix.triplet }}-${{ matrix.build-type }}"
+          path: "${{ env.CMAKE_BUILD_DIR }}/output"
+
+#      - name: Show space after build
+#        if: always()
+#        run: |
+#          Get-PSDrive

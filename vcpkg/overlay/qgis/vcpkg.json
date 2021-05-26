@@ -34,7 +34,6 @@
         "platform": "windows"
       },
       "qca",
-      "qscintilla",
       "qtkeychain"
     ],
     "features":
@@ -68,7 +67,8 @@
             "description": "Determines whether the QGIS gui should be built",
             "dependencies":
             [
-                "qwt"
+                "qwt",
+                "qscintilla"
             ]
         },
         {
@@ -78,6 +78,15 @@
         {
             "name": "customwidgets",
             "description": "Determines whether the QGIS custom widgets for QtCreator should be built"
+        },
+        {
+            "name": "quick",
+            "description": "Build the QGIS quick components for mobile interfaces",
+            "dependencies":
+            [
+                "qt5-quickcontrols2",
+                "qt5-declarative"
+            ]
         }
     ]
   }

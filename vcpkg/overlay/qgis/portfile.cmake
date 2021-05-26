@@ -1,18 +1,17 @@
 vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
 
-set(QGIS_REF 1405eb6d2d0fe830425ba6dde23d0e5d3210d7e6)
-set(QGIS_SHA512 1a5795a5399a7b1aa584f9538ef6b7f647c913d9056084e02c3cc5e121e03227be5e674cd03d06476eaab8b0d37399d3f1d75226c08baf6e9fbcd8dbf6c51ad6)
+set(QGIS_REF clean-cmake)
+set(QGIS_SHA512 1a16c1c09c8d75ae088325b11d553bd012a338305756790684559f65cbc1b887c422991f41bbf75d62ef882e6cae93119a96fda045ca6a175ca868ddee3a82a3)
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO qgis/QGIS
+    REPO m-kuhn/QGIS
     REF ${QGIS_REF}
     SHA512   ${QGIS_SHA512}
     HEAD_REF master
     PATCHES
         # Make qgis support python's debug library
         qgspython.patch
-        geos.patch
 )
 
 vcpkg_find_acquire_program(FLEX)
@@ -77,6 +76,12 @@ if("3d" IN_LIST FEATURES)
     list(APPEND QGIS_OPTIONS -DWITH_3D:BOOL=ON)
 else()
     list(APPEND QGIS_OPTIONS -DWITH_3D:BOOL=OFF)
+endif()
+
+if("quick" IN_LIST FEATURES)
+    list(APPEND QGIS_OPTIONS -DWITH_QUICK:BOOL=ON)
+else()
+    list(APPEND QGIS_OPTIONS -DWITH_QUICK:BOOL=OFF)
 endif()
 
 # Configure debug and release library paths

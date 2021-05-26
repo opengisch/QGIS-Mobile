@@ -1,0 +1,47 @@
+From 4117b5ce257a174625f1932d02abbf371407e961 Mon Sep 17 00:00:00 2001
+From: Matthias Kuhn <matthias@opengis.ch>
+Date: Wed, 26 May 2021 06:28:07 +0200
+Subject: [PATCH] Find gdal with deps
+
+---
+ CMakeLists.txt          | 1 +
+ src/core/CMakeLists.txt | 4 ++--
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 623d9a6516..3048d6a7ac 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -364,6 +364,7 @@ if(WITH_CORE)
+   find_package(Proj)
+   find_package(GEOS)
+   find_package(GDAL)
++  message(STATUS "Found GDAL: ${GDAL_LIBRARIES}")
+   find_package(Expat REQUIRED)
+   find_package(Spatialindex REQUIRED)
+   if (WITH_GUI)
+diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
+index 42c69d2e31..7cc9aae2b3 100644
+--- a/src/core/CMakeLists.txt
++++ b/src/core/CMakeLists.txt
+@@ -1812,7 +1812,7 @@ target_include_directories(qgis_core SYSTEM PUBLIC
+   ${${QT_VERSION_BASE}Sql_INCLUDE_DIRS}
+   ${${QT_VERSION_BASE}Concurrent_INCLUDE_DIRS}
+   ${PROJ_INCLUDE_DIR}
+-  ${GDAL_INCLUDE_DIR}
++  ${GDAL_INCLUDE_DIRS}
+   ${LIBZIP_INCLUDE_DIRS}
+   ${SPATIALINDEX_INCLUDE_DIR} # before GEOS for case-insensitive filesystems
+   ${GEOS_INCLUDE_DIR}
+@@ -1989,7 +1989,7 @@ target_link_libraries(qgis_core
+   ${QTKEYCHAIN_LIBRARY}
+   ${PROJ_LIBRARY}
+   ${GEOS_LIBRARY}
+-  ${GDAL_LIBRARY}
++  ${GDAL_LIBRARIES}
+   ${SPATIALINDEX_LIBRARY}
+   ${EXPAT_LIBRARY}
+   ${SQLITE3_LIBRARY}
+-- 
+2.31.1
+
