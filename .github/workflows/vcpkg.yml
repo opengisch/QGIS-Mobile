@@ -109,9 +109,9 @@ jobs:
       - uses: ilammy/msvc-dev-cmd@v1
         if: ${{ matrix.os == 'windows-2019' }}
 
-      - name: Setup tmate session
-        if: ${{ matrix.triplet == 'x64-linux' }}
-        uses: mxschmitt/action-tmate@v3
+#      - name: Setup tmate session
+#        if: ${{ matrix.triplet == 'x64-linux' }}
+#        uses: mxschmitt/action-tmate@v3
 
       - name: Free additional space
         if: ${{ matrix.triplet == 'x64-linux' }}
