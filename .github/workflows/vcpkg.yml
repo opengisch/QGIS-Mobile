@@ -30,12 +30,12 @@ jobs:
 #            build-type: 'Release'
 #            vcpkg-root: 'C:'
 
-#          - os: 'ubuntu-18.04'
-#            triplet: 'x64-linux'
-#            # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
-#            mono: 'mono'
-#            build-type: 'Release'
-#            vcpkg-root: '/home/runner'
+          - os: 'ubuntu-18.04'
+            triplet: 'x64-linux'
+            # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
+            mono: 'mono'
+            build-type: 'Release'
+            vcpkg-root: '/home/runner'
 
           - os: 'macos-10.15'
             triplet: 'x64-osx'
@@ -107,6 +107,11 @@ jobs:
           setapikey ${{ secrets.GITHUB_TOKEN }} -src "https://nuget.pkg.github.com/opengisch/index.json"
 
       - uses: ilammy/msvc-dev-cmd@v1
+        if: ${{ matrix.os == 'windows-2019' }}
+
+      - name: Setup tmate session
+        if: ${{ matrix.triplet == 'x64-linux' }}
+        uses: mxschmitt/action-tmate@v3
 
       - name: Free additional space
         if: ${{ matrix.triplet == 'x64-linux' }}
