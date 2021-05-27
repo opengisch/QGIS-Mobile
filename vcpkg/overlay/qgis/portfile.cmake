@@ -1,17 +1,18 @@
 vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
 
-set(QGIS_REF clean-cmake)
-set(QGIS_SHA512 23bf331e2497cbde5df1c20a00a6cc0668500c3fcda7214cf5de4c0662b1ec28cc0682b597ad279a1b2c9f58c24193be33cc56e281ec6b49286c3b7445381b16)
+set(QGIS_REF 1405eb6d2d0fe830425ba6dde23d0e5d3210d7e6)
+set(QGIS_SHA512 1a5795a5399a7b1aa584f9538ef6b7f647c913d9056084e02c3cc5e121e03227be5e674cd03d06476eaab8b0d37399d3f1d75226c08baf6e9fbcd8dbf6c51ad6)
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
-    REPO m-kuhn/QGIS
+    REPO qgis/QGIS
     REF ${QGIS_REF}
     SHA512   ${QGIS_SHA512}
     HEAD_REF master
     PATCHES
         # Make qgis support python's debug library
         qgspython.patch
+	geos.patch
 )
 
 vcpkg_find_acquire_program(FLEX)
