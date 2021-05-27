@@ -153,6 +153,10 @@ jobs:
           name: build-logs
           path: ${{ env.VCPKG_ROOT }}/buildtrees/**/*.log
 
+      - name: Setup tmate session
+        if: always()
+        uses: mxschmitt/action-tmate@v3
+
       - name: 🌍 Pull Translations
         shell: bash
         run: |
