@@ -30,7 +30,7 @@ jobs:
 #            build-type: 'Release'
 #            vcpkg-root: 'C:'
 
-          - os: 'ubuntu-18.04'
+          - os: 'ubuntu-20.04'
             triplet: 'x64-linux'
             # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
             mono: 'mono'
@@ -120,7 +120,7 @@ jobs:
           rm -rf /usr/share/dotnet/sdk
           rm -rf /usr/share/rust
           rm -rf /usr/share/swift
-          sudo apt remove llvm-* ghc-* google-chrome-* dotnet-sdk-* azure-cli google-cloud-sdk adoptopenjdk-12-hotspot adoptopenjdk-11-hotspot google-chrome-stable firefox
+          sudo apt remove llvm-* ghc-* google-chrome-* dotnet-sdk-* azure-cli google-cloud-sdk google-chrome-stable firefox
           dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
           du -a /usr/share | sort -n -r | head -n 10
           du -a /usr/local/share | sort -n -r | head -n 10
