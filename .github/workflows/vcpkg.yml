@@ -131,6 +131,7 @@ jobs:
       - name: Install linux deps
         if: ${{ matrix.triplet == 'x64-linux' }}
         run: |
+          sudo apt-get update
           sudo apt-get install -y gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
 
       - name: Install osx deps
