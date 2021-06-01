@@ -152,8 +152,8 @@ jobs:
 
       - name: Install dependencies and generate project files
         run: |
-          cd ${{ env.VCPKG_ROOT }}
-          ${{ env.VCPKG_ROOT }}/vcpkg install --overlay-ports=${{ github.workspace }}/vcpkg/overlay --debug qt5-declarative
+          #          cd ${{ env.VCPKG_ROOT }}
+          #          ${{ env.VCPKG_ROOT }}/vcpkg install --overlay-ports=${{ github.workspace }}/vcpkg/overlay --debug qt5-declarative
           cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS="${{ github.workspace }}/vcpkg/overlay" -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
 
       - name: Upload Build Logs
