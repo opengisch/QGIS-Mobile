@@ -124,9 +124,10 @@ jobs:
         if: ${{ matrix.triplet == 'x64-linux' }}
         run: |
           df -h
-          rm -rf /usr/share/dotnet/sdk
-          rm -rf /usr/share/rust
-          rm -rf /usr/share/swift
+          sudo rm -rf /usr/share/dotnet/sdk
+          sudo rm -rf /usr/share/rust
+          sudo rm -rf /usr/share/swift
+          sudo rm -rf /usr/local/lib/android
           sudo apt remove llvm-* ghc-* google-chrome-* dotnet-sdk-* azure-cli google-cloud-sdk google-chrome-stable firefox
           dpkg-query -Wf '${Installed-Size}\t${Package}\n' | sort -n | tail -n 100
           du -a /usr/share | sort -n -r | head -n 10
@@ -151,7 +152,8 @@ jobs:
 
       - name: Install dependencies and generate project files
         run: |
-          # ${{ env.VCPKG_ROOT }}/vcpkg install --debug qt5-declarative
+          cd ${{ env.VCPKG_ROOT }}
+          ${{ env.VCPKG_ROOT }}/vcpkg install --overlay-ports=${{ github.workspace }}/vcpkg/overlay --debug qt5-declarative
           cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS="${{ github.workspace }}/vcpkg/overlay" -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
 
       - name: Upload Build Logs
@@ -161,9 +163,9 @@ jobs:
           name: build-logs
           path: ${{ env.VCPKG_ROOT }}/buildtrees/**/*.log
 
-      - name: Setup tmate session
-        if: always()
-        uses: mxschmitt/action-tmate@v3
+            #      - name: Setup tmate session
+            #        if: always()
+            #        uses: mxschmitt/action-tmate@v3
 
       - name: 🌍 Pull Translations
         shell: bash
