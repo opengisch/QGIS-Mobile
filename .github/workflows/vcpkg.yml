@@ -88,7 +88,7 @@ jobs:
           path: |
             ${{ env.VCPKG_ROOT }}/vcpkg
             ${{ env.VCPKG_ROOT }}/vcpkg.exe
-          key: ${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}
+          key: ${{ runner.os }}-${{ hashFiles('.git/modules/vcpkg/HEAD') }}-x
 
       - name: Bootstrap vcpkg
         if: steps.cache-vcpkg-tool.outputs.cache-hit != 'true'
