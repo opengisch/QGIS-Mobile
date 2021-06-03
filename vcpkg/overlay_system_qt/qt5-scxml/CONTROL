@@ -1,0 +1,3 @@
+Source: qt5-scxml
+Version: 5.14.2
+Description: Qt5 SCXML Module - Provides classes and tools for creating state machines from SCXML files and embedding them in applications

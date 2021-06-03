@@ -1,0 +1,4 @@
+Source: qt5-activeqt
+Version: 5.14.2
+Description: Qt5 ActiveQt Module - ActiveX components
+Supports: windows

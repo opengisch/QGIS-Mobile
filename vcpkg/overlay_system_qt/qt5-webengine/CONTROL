@@ -1,0 +1,5 @@
+Source: qt5-webengine
+Version: 5.14.2
+Port-Version: 1
+Description: Qt5 webengine Module; 
+Supports: !static

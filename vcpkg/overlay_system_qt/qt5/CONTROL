@@ -1,0 +1,122 @@
+Source: qt5
+Version: 5.14.2
+Homepage: https://www.qt.io/
+Description: Qt5 Application Framework
+Default-Features: essentials
+
+Feature: essentials
+Description: Build the essential qt modules
+
+Feature: latest
+Description: Build latest qt version (5.15.2)
+
+Feature: all
+Description: Install all Qt5 submodules (Warning: Could take a long time and fail...)
+
+Feature: extras
+Description:
+
+Feature: 3d
+Description:
+
+Feature: webchannel
+Description:
+
+Feature: websockets
+Description:
+
+Feature: xmlpatterns
+Description: (deprecated)
+
+Feature: sensors
+Description:
+
+Feature: serialport
+Description:
+
+Feature: speech
+Description:
+
+Feature: svg
+Description:
+
+Feature: tools
+Description:
+
+Feature: virtualkeyboard
+Description:
+
+Feature: networkauth
+Description:
+
+Feature: purchasing
+Description:
+
+Feature: quickcontrols
+Description: (deprecated)
+
+Feature: quickcontrols2
+Description:
+
+Feature: script
+Description: (deprecated)
+
+Feature: scxml
+Description:
+
+Feature: activeqt
+Description: Windows Only
+
+Feature: charts
+Description:
+
+Feature: datavis3d
+Description:
+
+Feature: declarative
+Description:
+
+Feature: gamepad
+Description:
+
+Feature: graphicaleffects
+Description:
+
+Feature: imageformats
+Description:
+
+Feature: location
+Description:
+
+Feature: multimedia
+Description:
+
+Feature: mqtt
+Description:
+
+Feature: webglplugin
+Description:
+
+Feature: webview
+Description:
+
+Feature: wayland
+Description:
+
+Feature: webengine
+Description:
+
+Feature: serialbus
+Description:
+
+Feature: translations
+Description:
+
+Feature: doc
+Description:
+
+Feature: remoteobjects
+Description:
+
+Feature: connectivity
+Description:
