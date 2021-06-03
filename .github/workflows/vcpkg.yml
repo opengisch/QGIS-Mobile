@@ -155,8 +155,9 @@ jobs:
       - name: Install Qt
         if: ${{ matrix.install_qt }}
         uses: jurplel/install-qt-action@v2
-        version: 5.14.2
-        modules: 'qtcharts'
+        with:
+          version: 5.14.2
+          modules: 'qtcharts'
 
       - name: Install dependencies and generate project files
         run: |
