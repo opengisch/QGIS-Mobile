@@ -160,6 +160,7 @@ jobs:
           modules: 'qtcharts'
 
       - name: Install dependencies and generate project files
+        shell: bash
         run: |
           #          cd ${{ env.VCPKG_ROOT }}
           #          ${{ env.VCPKG_ROOT }}/vcpkg install --overlay-ports=${{ github.workspace }}/vcpkg/overlay --debug qt5-declarative
