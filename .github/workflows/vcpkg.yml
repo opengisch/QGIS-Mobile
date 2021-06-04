@@ -170,6 +170,7 @@ jobs:
           cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
 
       - name: Setup tmate session
+        if: failure()
         uses: mxschmitt/action-tmate@v3
         with:
           limit-access-to-actor: true
