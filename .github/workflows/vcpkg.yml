@@ -36,7 +36,7 @@ jobs:
             mono: 'mono'
             build-type: 'Release'
             vcpkg-root: '/home/runner'
-            overlay: 'vcpkg/overlay_system_qoverlay_system_qt'
+            overlay: 'vcpkg/overlay_system_qt'
             install_qt: true
 
           - os: 'macos-10.15'
@@ -164,7 +164,7 @@ jobs:
         run: |
           #          cd ${{ env.VCPKG_ROOT }}
           #          ${{ env.VCPKG_ROOT }}/vcpkg install --overlay-ports=${{ github.workspace }}/vcpkg/overlay --debug qt5-declarative
-          overlay_ports=(${{ matrix.overlay }} ${{ github.workspace }}/vcpkg/overlay)
+          overlay_ports=(${{ github.workspace }}/${{ matrix.overlay }} ${{ github.workspace }}/vcpkg/overlay)
 
           echo "Building with $(IFS=\; ; echo "${overlay_ports[*]}")"
           cmake -S "${{ github.workspace }}" -B "${{ env.CMAKE_BUILD_DIR }}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
