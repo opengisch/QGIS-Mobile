@@ -81,7 +81,7 @@ jobs:
           mkdir "${{ env.VCPKG_ROOT }}"
           cd "${{ env.VCPKG_ROOT }}"
           git init
-          git remote add origin https://github.com/opengisch/vcpkg.git
+          git remote add origin https://github.com/microsoft/vcpkg.git
           git fetch --depth 1 origin $VCPKG_SHA
           git checkout FETCH_HEAD
 
