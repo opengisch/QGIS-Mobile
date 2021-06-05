@@ -39,6 +39,8 @@ jobs:
             vcpkg-root: '/home/runner'
             overlay: 'vcpkg/overlay_system_qt'
             install_qt: true
+            qt_target: 'desktop'
+            qt_arch: ''
             pathconvert: 'echo'
 
           - os: 'macos-10.15'
@@ -55,7 +57,24 @@ jobs:
             mono: 'mono'
             build-type: 'Release'
             vcpkg-root: '/Users/runner'
+            overlay: 'vcpkg/overlay_system_qt'
+            install_qt: true
+            qt_target: 'ios'
+            qt_arch: 'ios'
             pathconvert: 'echo'
+
+          - os: 'ubuntu-20.04'
+            triplet: 'arm64-android'
+            # To run `nuget.exe` on non-Windows platforms, we must use `mono`.
+            mono: 'mono'
+            build-type: 'Release'
+            vcpkg-root: '/home/runner'
+            overlay: 'vcpkg/overlay_system_qt'
+            install_qt: true
+            qt_target: 'android'
+            qt_arch: 'android'
+            pathconvert: 'echo'
+
 
     env:
       TX_TOKEN: ${{ secrets.TX_TOKEN }}
@@ -148,6 +167,8 @@ jobs:
         with:
           version: 5.14.2
           modules: 'qtcharts'
+          target: ${{ matrix.qt_target }}
+          arch: ${{ matrix.qt_arch }}
 
       - name: Prepare linux build env
         if: ${{ matrix.triplet == 'x64-linux' }}
