@@ -178,6 +178,11 @@ jobs:
           echo "Building with $(IFS=\; ; echo "${overlay_ports[*]}")"
           cmake -S "${SOURCE_DIR}" -B "${CMAKE_BUILD_DIR}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}"
 
+      - name: Print log
+        if: failutre()
+        run: |
+           tail -n 200 /home/runner/src/buildtrees/qgis/install-x64-linux-dbg-out.log
+
       - name: Setup tmate session
         if: failure()
         uses: mxschmitt/action-tmate@v3
