@@ -183,7 +183,7 @@ jobs:
       - name: Print log
         if: failure()
         run: |
-           tail -n 200 /home/runner/src/buildtrees/qgis/install-x64-linux-dbg-out.log
+           tail -n 200 ${{ env.VCPKG_ROOT }}/buildtrees/qgis/install-*.log
 
       - name: Setup tmate session
         if: failure()
