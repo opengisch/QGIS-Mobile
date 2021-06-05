@@ -179,7 +179,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y gperf autopoint '^libxcb.*-dev' libx11-xcb-dev libglu1-mesa-dev libxrender-dev libxi-dev libxkbcommon-dev libxkbcommon-x11-dev
           sudo apt-get remove -y libopenexr-dev # Avoid gdal picking this system lib up
-          echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=-l${Qt5_DIR}/lib/libQt5DBus.so" >> $GITHUB_ENV
+          echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=${Qt5_DIR}/lib/libQt5DBus.so" >> $GITHUB_ENV
 
       - name: Prepare osx build env
         if: ${{ matrix.triplet == 'x64-osx' }}
