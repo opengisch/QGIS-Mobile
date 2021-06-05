@@ -161,7 +161,7 @@ if (VCPKG_TARGET_IS_WINDOWS)
         ogr2ogr
         ogrinfo
         ogrlineref
-        grtindex
+#        grtindex
         testepsg
     )
     vcpkg_copy_tools(TOOL_NAMES ${GDAL_EXES} AUTO_CLEAN)
