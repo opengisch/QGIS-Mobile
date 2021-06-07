@@ -184,7 +184,7 @@ elseif(VCPKG_TARGET_IS_LINUX OR VCPKG_TARGET_IS_OSX) # Build in UNIX
         list(APPEND QGIS_OPTIONS_RELEASE -DPoly2Tri_LIBRARY:PATH=${CURRENT_INSTALLED_DIR}/lib/libqt_poly2tri.a) # static qt only
     endif()
     if(VCPKG_TARGET_IS_OSX) 
-        list(APPEND QGIS_OPTIONS -DQGIS_MACAPP_BUNDLE=0)
+        list(APPEND QGIS_OPTIONS -DQGIS_MACAPP_FRAMEWORK=FALSE)
     endif()
 else() # Other build system
   message(FATAL_ERROR "Unsupport build system.")
