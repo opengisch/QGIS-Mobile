@@ -13,6 +13,7 @@ vcpkg_from_github(
         # Make qgis support python's debug library
         qgspython.patch
 	geos.patch
+	native_static.patch
 )
 
 vcpkg_find_acquire_program(FLEX)
@@ -98,6 +99,12 @@ macro(FIND_LIB_OPTIONS basename relname debname suffix libsuffix)
         list(APPEND QGIS_OPTIONS -D${basename}_${suffix}:FILEPATH=${${basename}_LIBRARY_DEBUG})
    endif()
 endmacro()
+
+
+if (VCPKG_LIBRARY_LINKAGE STREQUAL static)
+    list(APPEND QGIS_OPTIONS -DFORCE_STATIC_LIBS=TRUE)
+    list(APPEND QGIS_OPTIONS -DFORCE_STATIC_PROVIDERS=TRUE)
+endif()
 
 if(VCPKG_TARGET_IS_WINDOWS)
     ##############################################################################

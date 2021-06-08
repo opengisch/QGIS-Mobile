@@ -1,0 +1,25 @@
+From e282f1f3bf7fb91b24d64d30b0572306ee4c5078 Mon Sep 17 00:00:00 2001
+From: Matthias Kuhn <matthias@opengis.ch>
+Date: Tue, 8 Jun 2021 22:56:52 +0200
+Subject: [PATCH] Allow building qgis_native as static library
+
+---
+ src/native/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/native/CMakeLists.txt b/src/native/CMakeLists.txt
+index 7369d93039..c2e6702e52 100644
+--- a/src/native/CMakeLists.txt
++++ b/src/native/CMakeLists.txt
+@@ -85,7 +85,7 @@ endif()
+ #############################################################
+ # qgis_native library
+ 
+-add_library(qgis_native SHARED ${QGIS_NATIVE_SRCS} ${QGIS_NATIVE_HDRS})
++add_library(qgis_native ${LIBRARY_TYPE} ${QGIS_NATIVE_SRCS} ${QGIS_NATIVE_HDRS})
+ set_property(TARGET qgis_native PROPERTY POSITION_INDEPENDENT_CODE ON)
+ 
+ # require c++17
+-- 
+2.31.1
+
