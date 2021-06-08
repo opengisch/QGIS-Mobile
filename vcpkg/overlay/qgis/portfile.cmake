@@ -200,115 +200,115 @@ vcpkg_configure_cmake(
 
 vcpkg_install_cmake()
 
-## handle qgis tools and plugins
-#function(copy_path basepath)
-#    file(GLOB ${basepath}_PATH ${CURRENT_PACKAGES_DIR}/${basepath}/*)
-#    if( ${basepath}_PATH )
-#        file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/tools/${PORT}/${basepath})
-#        file(COPY ${${basepath}_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/${basepath})
-#    endif()
-#
-#    if(EXISTS "${CURRENT_PACKAGES_DIR}/${basepath}/")
-#        file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/${basepath}/)
-#    endif()
-#
-#    if("debug-tools" IN_LIST FEATURES)
-#        file(GLOB ${basepath}_DEBUG_PATH ${CURRENT_PACKAGES_DIR}/debug/${basepath}/*)
-#        if( ${basepath}_DEBUG_PATH )
-#            file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/${basepath})
-#            file(COPY ${${basepath}_DEBUG_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/${basepath})
-#        endif()
-#    endif()
-#
-#    if(EXISTS "${CURRENT_PACKAGES_DIR}/debug/${basepath}/")
-#        file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/${basepath}/)
-#    endif()
-#endfunction()
-#
-#file(GLOB QGIS_CMAKE_PATH ${CURRENT_PACKAGES_DIR}/*.cmake)
-#if(QGIS_CMAKE_PATH)
-#    file(COPY ${QGIS_CMAKE_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/share/cmake/${PORT})
-#    file(REMOVE_RECURSE ${QGIS_CMAKE_PATH})
-#endif()
-#file(GLOB QGIS_CMAKE_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/*.cmake)
-#if( QGIS_CMAKE_PATH_DEBUG )
-#    file(REMOVE_RECURSE ${QGIS_CMAKE_PATH_DEBUG})
-#endif()
-#
-#file(GLOB QGIS_TOOL_PATH ${CURRENT_PACKAGES_DIR}/bin/*${VCPKG_TARGET_EXECUTABLE_SUFFIX} ${CURRENT_PACKAGES_DIR}/*${VCPKG_TARGET_EXECUTABLE_SUFFIX})
-#if(QGIS_TOOL_PATH)
-#    file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
-#    file(COPY ${QGIS_TOOL_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
-#    file(REMOVE_RECURSE ${QGIS_TOOL_PATH})
-#    file(GLOB QGIS_TOOL_PATH ${CURRENT_PACKAGES_DIR}/bin/* )
-#    file(COPY ${QGIS_TOOL_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
-#endif()
-#
-#file(GLOB QGIS_TOOL_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/bin/*${VCPKG_TARGET_EXECUTABLE_SUFFIX} ${CURRENT_PACKAGES_DIR}/debug/*${VCPKG_TARGET_EXECUTABLE_SUFFIX})
-#if(QGIS_TOOL_PATH_DEBUG)
-#    if("debug-tools" IN_LIST FEATURES)
-#        file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
-#        file(COPY ${QGIS_TOOL_PATH_DEBUG} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
-#        file(REMOVE_RECURSE ${QGIS_TOOL_PATH_DEBUG})
-#        file(GLOB QGIS_TOOL_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/bin/* )
-#        file(COPY ${QGIS_TOOL_PATH_DEBUG} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
-#    else()
-#        file(REMOVE_RECURSE ${QGIS_TOOL_PATH_DEBUG})
-#    endif()
-#endif()
-#
-#copy_path(doc)
-#copy_path(i18n)
-#copy_path(icons)
-#copy_path(images)
-#copy_path(plugins)
-#copy_path(python)
-#copy_path(resources)
-#if("server" IN_LIST FEATURES)
-#    copy_path(server)
-#endif()
-#copy_path(svg)
-#
-#if(VCPKG_TARGET_IS_WINDOWS)
-#    # Extend vcpkg_copy_tool_dependencies to support the export of dll and exe dependencies in different directories to the same directory,
-#    # and support the copy of debug dependencies
-#    function(vcpkg_copy_tool_dependencies_ex TOOL_DIR OUTPUT_DIR SEARCH_DIR)
-#        find_program(PS_EXE powershell PATHS ${DOWNLOADS}/tool)
-#        if (PS_EXE-NOTFOUND)
-#            message(FATAL_ERROR "Could not find powershell in vcpkg tools, please open an issue to report this.")
-#        endif()
-#        macro(search_for_dependencies PATH_TO_SEARCH)
-#            file(GLOB TOOLS ${TOOL_DIR}/*.exe ${TOOL_DIR}/*.dll)
-#            foreach(TOOL ${TOOLS})
-#                vcpkg_execute_required_process(
-#                    COMMAND ${PS_EXE} -noprofile -executionpolicy Bypass -nologo
-#                        -file ${CMAKE_CURRENT_LIST_DIR}/applocal.ps1
-#                        -targetBinary ${TOOL}
-#                        -installedDir ${PATH_TO_SEARCH}
-#                        -outputDir    ${OUTPUT_DIR}
-#                    WORKING_DIRECTORY ${VCPKG_ROOT_DIR}
-#                    LOGNAME copy-tool-dependencies
-#                )
-#            endforeach()
-#        endmacro()
-#        search_for_dependencies(${CURRENT_PACKAGES_DIR}/${SEARCH_DIR})
-#        search_for_dependencies(${CURRENT_INSTALLED_DIR}/${SEARCH_DIR})
-#    endfunction()
-#
-#    vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
-#    vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/plugins ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
-#    if("debug-tools" IN_LIST FEATURES)
-#        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
-#        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/plugins ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
-#    endif()
-#    if("server" IN_LIST FEATURES)
-#        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/server ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
-#        if("debug-tools" IN_LIST FEATURES)
-#            vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/server ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
-#        endif()
-#    endif()
-#endif()
-#
+if(VCPKG_TARGET_IS_WINDOWS)
+    # handle qgis tools and plugins
+    function(copy_path basepath)
+        file(GLOB ${basepath}_PATH ${CURRENT_PACKAGES_DIR}/${basepath}/*)
+        if( ${basepath}_PATH )
+            file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/tools/${PORT}/${basepath})
+            file(COPY ${${basepath}_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/${basepath})
+        endif()
+    
+        if(EXISTS "${CURRENT_PACKAGES_DIR}/${basepath}/")
+            file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/${basepath}/)
+        endif()
+    
+        if("debug-tools" IN_LIST FEATURES)
+            file(GLOB ${basepath}_DEBUG_PATH ${CURRENT_PACKAGES_DIR}/debug/${basepath}/*)
+            if( ${basepath}_DEBUG_PATH )
+                file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/${basepath})
+                file(COPY ${${basepath}_DEBUG_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/${basepath})
+            endif()
+        endif()
+    
+        if(EXISTS "${CURRENT_PACKAGES_DIR}/debug/${basepath}/")
+            file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/${basepath}/)
+        endif()
+    endfunction()
+    
+    file(GLOB QGIS_CMAKE_PATH ${CURRENT_PACKAGES_DIR}/*.cmake)
+    if(QGIS_CMAKE_PATH)
+        file(COPY ${QGIS_CMAKE_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/share/cmake/${PORT})
+        file(REMOVE_RECURSE ${QGIS_CMAKE_PATH})
+    endif()
+    file(GLOB QGIS_CMAKE_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/*.cmake)
+    if( QGIS_CMAKE_PATH_DEBUG )
+        file(REMOVE_RECURSE ${QGIS_CMAKE_PATH_DEBUG})
+    endif()
+    
+    file(GLOB QGIS_TOOL_PATH ${CURRENT_PACKAGES_DIR}/bin/*${VCPKG_TARGET_EXECUTABLE_SUFFIX} ${CURRENT_PACKAGES_DIR}/*${VCPKG_TARGET_EXECUTABLE_SUFFIX})
+    if(QGIS_TOOL_PATH)
+        file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
+        file(COPY ${QGIS_TOOL_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
+        file(REMOVE_RECURSE ${QGIS_TOOL_PATH})
+        file(GLOB QGIS_TOOL_PATH ${CURRENT_PACKAGES_DIR}/bin/* )
+        file(COPY ${QGIS_TOOL_PATH} DESTINATION ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin)
+    endif()
+    
+    file(GLOB QGIS_TOOL_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/bin/*${VCPKG_TARGET_EXECUTABLE_SUFFIX} ${CURRENT_PACKAGES_DIR}/debug/*${VCPKG_TARGET_EXECUTABLE_SUFFIX})
+    if(QGIS_TOOL_PATH_DEBUG)
+        if("debug-tools" IN_LIST FEATURES)
+            file(MAKE_DIRECTORY ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
+            file(COPY ${QGIS_TOOL_PATH_DEBUG} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
+            file(REMOVE_RECURSE ${QGIS_TOOL_PATH_DEBUG})
+            file(GLOB QGIS_TOOL_PATH_DEBUG ${CURRENT_PACKAGES_DIR}/debug/bin/* )
+            file(COPY ${QGIS_TOOL_PATH_DEBUG} DESTINATION ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin)
+        else()
+            file(REMOVE_RECURSE ${QGIS_TOOL_PATH_DEBUG})
+        endif()
+    endif()
+    
+    copy_path(doc)
+    copy_path(i18n)
+    copy_path(icons)
+    copy_path(images)
+    copy_path(plugins)
+    copy_path(python)
+    copy_path(resources)
+    if("server" IN_LIST FEATURES)
+        copy_path(server)
+    endif()
+    copy_path(svg)
+
+    # Extend vcpkg_copy_tool_dependencies to support the export of dll and exe dependencies in different directories to the same directory,
+    # and support the copy of debug dependencies
+    function(vcpkg_copy_tool_dependencies_ex TOOL_DIR OUTPUT_DIR SEARCH_DIR)
+        find_program(PS_EXE powershell PATHS ${DOWNLOADS}/tool)
+        if (PS_EXE-NOTFOUND)
+            message(FATAL_ERROR "Could not find powershell in vcpkg tools, please open an issue to report this.")
+        endif()
+        macro(search_for_dependencies PATH_TO_SEARCH)
+            file(GLOB TOOLS ${TOOL_DIR}/*.exe ${TOOL_DIR}/*.dll)
+            foreach(TOOL ${TOOLS})
+                vcpkg_execute_required_process(
+                    COMMAND ${PS_EXE} -noprofile -executionpolicy Bypass -nologo
+                        -file ${CMAKE_CURRENT_LIST_DIR}/applocal.ps1
+                        -targetBinary ${TOOL}
+                        -installedDir ${PATH_TO_SEARCH}
+                        -outputDir    ${OUTPUT_DIR}
+                    WORKING_DIRECTORY ${VCPKG_ROOT_DIR}
+                    LOGNAME copy-tool-dependencies
+                )
+            endforeach()
+        endmacro()
+        search_for_dependencies(${CURRENT_PACKAGES_DIR}/${SEARCH_DIR})
+        search_for_dependencies(${CURRENT_INSTALLED_DIR}/${SEARCH_DIR})
+    endfunction()
+
+    vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
+    vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/plugins ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
+    if("debug-tools" IN_LIST FEATURES)
+        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
+        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/plugins ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
+    endif()
+    if("server" IN_LIST FEATURES)
+        vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/tools/${PORT}/server ${CURRENT_PACKAGES_DIR}/tools/${PORT}/bin bin)
+        if("debug-tools" IN_LIST FEATURES)
+            vcpkg_copy_tool_dependencies_ex(${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/server ${CURRENT_PACKAGES_DIR}/debug/tools/${PORT}/bin debug/bin)
+        endif()
+    endif()
+endif()
+
 file(REMOVE_RECURSE
     ${CURRENT_PACKAGES_DIR}/debug/include
 )

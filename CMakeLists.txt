@@ -38,7 +38,10 @@ set (QFIELD_BIN_SUBDIR     ${DEFAULT_BIN_SUBDIR}     CACHE STRING "Subdirectory 
 set (QFIELD_LIB_SUBDIR     ${DEFAULT_LIB_SUBDIR}     CACHE STRING "Subdirectory where libraries will be installed")
 set (QFIELD_INCLUDE_SUBDIR ${DEFAULT_INCLUDE_SUBDIR} CACHE STRING "Subdirectory where header files will be installed")
 
-mark_as_advanced (QFIELD_INCLUDE_SUBDIR QFIELD_BIN_SUBDIR QFIELD_LIB_SUBDIR)
+set (WITH_VCPKG OFF CACHE BOOL "Build with vcpkg packaging layout")
+set (USE_MAC_BUNDLING NOT ${WITH_VCPKG} CACHE BOOL "Use mac bundling")
+
+mark_as_advanced (QFIELD_INCLUDE_SUBDIR QFIELD_BIN_SUBDIR QFIELD_LIB_SUBDIR WITH_VCPKG USE_MAC_BUNDLING)
 set (QFIELD_BIN_DIR ${QFIELD_BIN_SUBDIR})
 set (QFIELD_LIB_DIR ${QFIELD_LIB_SUBDIR})
 set (QFIELD_INCLUDE_DIR ${QFIELD_INCLUDE_SUBDIR})
@@ -183,7 +186,7 @@ if (ENABLE_TESTS)
   add_subdirectory(test)
 endif()
 
-if(MSVC)
+if(VCPKG)
   file(GLOB PROVIDER_LIBS
     "${QGIS_PLUGIN_DIR}/*provider.dll"
   )

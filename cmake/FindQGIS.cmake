@@ -98,7 +98,7 @@ ELSE(WIN32)
     )
 
     # also get other frameworks' headers folders on OS X
-    IF (APPLE)
+    IF (APPLE AND USE_MAC_BUNDLING)
       FIND_PATH(QGIS_ANALYSIS_INCLUDE_DIR
         NAMES qgsanalysis.h
         PATHS
@@ -117,7 +117,7 @@ ELSE(WIN32)
 
       # qgis_core is an archive without extensions for ios
       SET(CMAKE_FIND_LIBRARY_SUFFIXES ${CMAKE_FIND_LIBRARY_SUFFIXES} "")
-    ENDIF (APPLE)
+    ENDIF (APPLE AND USE_MAC_BUNDLING)
 
 
     FIND_LIBRARY(QGIS_CORE_LIBRARY
@@ -153,7 +153,7 @@ ELSE(WIN32)
         QGIS.app/Contents/Frameworks/qgis_analysis.framework
     )
 
-    IF (APPLE)
+    IF (APPLE AND USE_MAC_BUNDLING)
       FIND_PATH(QGIS_APPLE_RESOURCES_DIR
         NAMES FindQGIS.cmake
         PATHS
