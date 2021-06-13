@@ -1,0 +1,66 @@
+diff -ur qca-2.3.1/src/CMakeLists.txt b/src/CMakeLists.txt
+--- qca-2.3.1/src/CMakeLists.txt	2020-07-04 08:51:52.000000000 +0000
++++ b/src/CMakeLists.txt	2021-06-13 21:29:05.117077590 +0000
+@@ -44,7 +44,7 @@
+ 	qca_securelayer.cpp
+ 	qca_securemessage.cpp
+ 	support/qpipe.cpp
+-	support/console.cpp
++	#	support/console.cpp
+ 	support/synchronizer.cpp
+ 	support/dirwatch.cpp
+ 	support/syncthread.cpp
+@@ -52,8 +52,8 @@
+ 
+ IF (WIN32)
+   SET( SOURCES ${SOURCES} qca_systemstore_win.cpp )
+-elseif(APPLE)
+-  set( SOURCES ${SOURCES} qca_systemstore_mac.cpp)
++  #elseif(APPLE)
++  #  set( SOURCES ${SOURCES} qca_systemstore_mac.cpp)
+ else()
+   SET( SOURCES ${SOURCES} qca_systemstore_flatfile.cpp )
+ endif()
+@@ -130,24 +130,24 @@
+ 	TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} crypt32 ws2_32)
+ endif()
+ 
+-if(APPLE)
+-  set(COREFOUNDATION_LIBRARY "-framework CoreFoundation")
+-  set(COREFOUNDATION_LIBRARY_SECURITY "-framework Security")
+-  TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} ${COREFOUNDATION_LIBRARY} ${COREFOUNDATION_LIBRARY_SECURITY})
+-
+-  if(NOT USE_RELATIVE_PATHS)
+-    set_target_properties(${QCA_LIB_NAME} PROPERTIES
+-                          INSTALL_NAME_DIR "${QCA_LIBRARY_INSTALL_DIR}"
+-    )
+-  endif()
+-endif()
+-
+-if(NOT ANDROID)
+-  set_target_properties(${QCA_LIB_NAME} PROPERTIES
+-                        VERSION ${QCA_LIB_MAJOR_VERSION}.${QCA_LIB_MINOR_VERSION}.${QCA_LIB_PATCH_VERSION}
+-                        SOVERSION ${QCA_LIB_MAJOR_VERSION}
+-                        )
+-endif()
++#if(APPLE)
++#  set(COREFOUNDATION_LIBRARY "-framework CoreFoundation")
++#  set(COREFOUNDATION_LIBRARY_SECURITY "-framework Security")
++#  TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} ${COREFOUNDATION_LIBRARY} ${COREFOUNDATION_LIBRARY_SECURITY})
++#
++#  if(NOT USE_RELATIVE_PATHS)
++#    set_target_properties(${QCA_LIB_NAME} PROPERTIES
++#                          INSTALL_NAME_DIR "${QCA_LIBRARY_INSTALL_DIR}"
++#    )
++#  endif()
++#endif()
++
++#if(NOT ANDROID)
++#  set_target_properties(${QCA_LIB_NAME} PROPERTIES
++#                        VERSION ${QCA_LIB_MAJOR_VERSION}.${QCA_LIB_MINOR_VERSION}.${QCA_LIB_PATCH_VERSION}
++#                        SOVERSION ${QCA_LIB_MAJOR_VERSION}
++#                        )
++#endif()
+ 
+ set_target_properties(${QCA_LIB_NAME} PROPERTIES
+                       DEFINE_SYMBOL QCA_MAKEDLL

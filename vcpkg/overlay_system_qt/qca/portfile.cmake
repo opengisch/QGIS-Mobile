@@ -20,6 +20,7 @@ vcpkg_from_github(
     PATCHES
         0001-fix-path-for-vcpkg.patch
         0002-fix-build-error.patch
+	ios.patch
 )
 
 # Remove these files on the cmake next update
