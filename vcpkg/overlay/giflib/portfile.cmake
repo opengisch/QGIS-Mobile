@@ -4,6 +4,8 @@ set(GIFLIB_VERSION 5.1.4)
 
 if (VCPKG_TARGET_IS_WINDOWS)
     set(ADDITIONAL_PATCH "fix-compile-error.patch")
+elseif (VCPKG_TARGET_IS_ANDROID)
+    set(ADDITIONAL_PATCH "s_iwrite.patch")
 endif()
 
 vcpkg_from_sourceforge(
@@ -13,7 +15,6 @@ vcpkg_from_sourceforge(
     SHA512 32b5e342056c210e6478e9cb3b6ceec9594dcfaf34feea1eb4dad633a081ed4465bceee578c19165907cb47cb83912ac359ceea666a8e07dbbb5420f9928f96d
     PATCHES
         msvc-guard-unistd-h.patch
-	s_iwrite.patch
         ${ADDITIONAL_PATCH}
 )
 
