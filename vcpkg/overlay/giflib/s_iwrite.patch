@@ -1,0 +1,28 @@
+diff -ur 32b5e34205-441ed86788.clean/lib/egif_lib.c b/lib/egif_lib.c
+--- 32b5e34205-441ed86788.clean/lib/egif_lib.c	2021-06-14 18:53:46.883939501 +0000
++++ b/lib/egif_lib.c	2021-06-14 18:52:56.746616347 +0000
+@@ -61,10 +61,10 @@
+ 
+     if (TestExistence)
+         FileHandle = open(FileName, O_WRONLY | O_CREAT | O_EXCL, 
+-			  S_IREAD | S_IWRITE);
++			  S_IRUSR | S_IWUSR);
+     else
+         FileHandle = open(FileName, O_WRONLY | O_CREAT | O_TRUNC, 
+-			  S_IREAD | S_IWRITE);
++			  S_IRUSR | S_IWUSR);
+ 
+     if (FileHandle == -1) {
+         if (Error != NULL)
+diff -ur 32b5e34205-441ed86788.clean/util/gifinto.c b/util/gifinto.c
+--- 32b5e34205-441ed86788.clean/util/gifinto.c	2021-06-14 18:53:59.717022218 +0000
++++ b/util/gifinto.c	2021-06-14 18:52:56.750616372 +0000
+@@ -58,7 +58,7 @@
+     {
+       errno = e;
+       fd = _open(p, _O_RDWR | _O_CREAT | _O_EXCL | _O_BINARY,
+-		 _S_IREAD | _S_IWRITE);
++		 _S_IRUSR | _S_IWUSR);
+     }
+   return fd;
+ }

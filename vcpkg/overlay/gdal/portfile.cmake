@@ -205,15 +205,20 @@ else()
 
     if(VCPKG_TARGET_IS_LINUX)
         set(DEPENDLIBS "-lstdc++")
-    else()
+    elseif(VCPKG_TARGET_IS_OSX)
         set(DEPENDLIBS "-lc++ -liconv -llber -lldap -framework CoreFoundation -framework Security")
     endif()
 
+    if("hdf5" IN_LIST FEATURES OR "netcdf" IN_LIST FEATURES)
+        set(EXTRALIBS_RELEASE "-lszip")
+	set(EXTRALIBS_DEBUG "-lszip_debug")
+    endif()
+
     list(APPEND OPTIONS_RELEASE
-        "LIBS=-pthread ${DEPENDLIBS} -lssl -lcrypto  -lgeos_c -lgeos -llzma -lszip"
+        "LIBS=-pthread ${DEPENDLIBS} -lssl -lcrypto  -lgeos_c -lgeos -llzma ${EXTRALIBS_RELEASE}"
     )
     list(APPEND OPTIONS_DEBUG
-        "LIBS=-pthread ${DEPENDLIBS} -lssl -lcrypto -lgeos_cd -lgeosd -llzmad -lszip_debug"
+        "LIBS=-pthread ${DEPENDLIBS} -lssl -lcrypto -lgeos_cd -lgeosd -llzmad ${EXTRALIBS_DEBUG}"
     )
 
     vcpkg_configure_make(

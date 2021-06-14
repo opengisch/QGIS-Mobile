@@ -10,18 +10,12 @@
     "expat",
     "geos",
     "giflib",
-    "hdf5",
-    {
-      "name": "json-c",
-      "platform": "!windows"
-    },
     "libgeotiff",
     "liblzma",
     "libpng",
     "libpq",
     "libwebp",
     "libxml2",
-    "netcdf-c",
     "openjpeg",
     "proj4",
     "sqlite3",
@@ -39,6 +33,22 @@
       "description": "Add mysql support using libmariadb",
       "dependencies": [
         "libmariadb"
+      ]
+    },
+    "hdf5": {
+      "description": "Support for HDF5",
+      "dependencies": [
+        "hdf5",
+        {
+          "name": "json-c",
+          "platform": "!windows"
+        }
+      ]
+    },
+    "netcdf": {
+      "description": "Support for netcdf",
+      "dependencies": [
+        "netcdf-c"
       ]
     }
   }
