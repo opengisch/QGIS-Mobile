@@ -204,10 +204,17 @@ jobs:
           echo "Building with $(IFS=\; ; echo "${overlay_ports[*]}")"
           cmake -S "${SOURCE_DIR}" -B "${CMAKE_BUILD_DIR}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" -DWITH_VCPKG=ON -DUSE_MAC_BUNDLING=OFF
 
+      - name: Upload lxml2
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: xml2-config-${{ matrix.triplet }}
+          path: ${{ env.VCPKG_ROOT }}/buildtrees/libxml2
+
       - name: Print log
         if: failure()
         run: |
-           tail -n 200 ${{ env.VCPKG_ROOT }}/buildtrees/qgis/install-*.log
+          cat ${{ env.VCPKG_ROOT }}/buildtrees/libxml2/**/config.h
 
 #      - name: Setup tmate session
 #        if: always()
@@ -219,7 +226,7 @@ jobs:
         uses: actions/upload-artifact@v2
         if: always()
         with:
-          name: build-logs
+          name: build-logs-${{ matrix.triplet }}
           path: ${{ env.VCPKG_ROOT }}/buildtrees/**/*.log
 
             #      - name: Setup tmate session
