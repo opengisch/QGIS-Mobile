@@ -182,7 +182,7 @@ jobs:
           echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=${Qt5_DIR}/lib/libQt5DBus.so /home/runner/builddir/vcpkg_installed/x64-linux/lib/libglib-2.0.a /home/runner/builddir/vcpkg_installed/x64-linux/lib/libpgcommon.a /home/runner/builddir/vcpkg_installed/x64-linux/lib/libpgport.a /home/runner/builddir/vcpkg_installed/x64-linux/lib/libwebp.a" >> $GITHUB_ENV
 
       - name: Prepare osx build env
-        if: ${{ matrix.triplet == 'x64-osx' }}
+        if: ${{ matrix.os == 'macos-10.15' }}
         run: |
           brew install automake bison flex
           echo $(brew --prefix bison)/bin >> $GITHUB_PATH
