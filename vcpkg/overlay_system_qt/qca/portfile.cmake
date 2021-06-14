@@ -79,6 +79,10 @@ vcpkg_configure_cmake(
         -DQCA_SUFFIX=OFF
         -DQCA_FEATURE_INSTALL_DIR=${CURRENT_PACKAGES_DIR}/share/qca/mkspecs/features
         -DOSX_FRAMEWORK=OFF
+        -DWITH_nss_PLUGIN=OFF
+        -DWITH_pkcs11_PLUGIN=OFF
+        -DWITH_gnupg_PLUGIN=OFF
+        -DWITH_gcrypt_PLUGIN=OFF
         -DCMAKE_FIND_ROOT_PATH=$ENV{Qt5_DIR}
     OPTIONS_DEBUG
         -DQCA_PLUGINS_INSTALL_DIR=${QCA_FEATURE_INSTALL_DIR_DEBUG}
