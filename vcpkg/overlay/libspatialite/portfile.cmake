@@ -92,7 +92,7 @@ else () # Build in UNIX
       set(STDLIB c++)
   endif()
   if(VCPKG_TARGET_IS_LINUX OR VCPKG_TARGET_IS_OSX)
-    SET(EXTRALIBS "-lpthtread")
+    SET(EXTRALIBS "-lpthread")
   endif()
   list(APPEND OPTIONS_RELEASE
       "LIBXML2_LIBS=-lxml2 -llzma"
