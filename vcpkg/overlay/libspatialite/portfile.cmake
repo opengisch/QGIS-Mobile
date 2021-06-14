@@ -11,6 +11,7 @@ vcpkg_extract_source_archive_ex(
     PATCHES
         fix-makefiles.patch
         fix-linux-configure.patch
+        ios.patch
 )
 
 if (VCPKG_TARGET_IS_WINDOWS)

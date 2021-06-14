@@ -1,0 +1,24 @@
+--- atialite-5-6ff71fc678.clean/src/gaiaaux/gg_utf8.c   2020-08-23 16:46:22.000000000 +0000
++++ b/src/gaiaaux/gg_utf8.c     2021-06-14 23:22:31.000000000 +0000
+@@ -73,7 +73,7 @@
+ #include <localcharset.h>
+ #endif /* end localcharset */
+ #else /* not MINGW32 - WIN32 */
+-#if defined(__APPLE__) || defined(__ANDROID__)
++#if defined(MACOS) || defined(__ANDROID__)
+ #include <iconv.h>
+ #include <localcharset.h>
+ #else /* neither Mac OsX nor Android */
+diff -ur atialite-5-6ff71fc678.clean/src/gaiageo/gg_shape.c b/src/gaiageo/gg_shape.c
+--- atialite-5-6ff71fc678.clean/src/gaiageo/gg_shape.c  2020-08-23 16:46:22.000000000 +0000
++++ b/src/gaiageo/gg_shape.c    2021-06-14 23:21:53.000000000 +0000
+@@ -71,7 +71,7 @@
+ #include <localcharset.h>
+ #endif /* end localcharset */
+ #else /* not MINGW32 */
+-#if defined(__APPLE__) || defined(__ANDROID__)
++#if defined(MACOS) || defined(__ANDROID__)
+ #include <iconv.h>
+ #include <localcharset.h>
+ #else /* neither Mac OsX nor Android */
+
