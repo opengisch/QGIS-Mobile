@@ -1,0 +1,13 @@
+diff -ur freexl-1-16a0e625c2.clean/src/freexl.c b/src/freexl.c
+--- freexl-1-16a0e625c2.clean/src/freexl.c      2021-06-14 23:08:04.000000000 +0000
++++ b/src/freexl.c      2021-06-14 23:07:05.000000000 +0000
+@@ -61,7 +61,7 @@
+ #include <localcharset.h>
+ #endif /* end localcharset */
+ #else /* not WINDOWS */
+-#if defined(__APPLE__) || defined(__ANDROID__)
++#if defined(MACOS) || defined(__ANDROID__)
+ #include <iconv.h>
+ #include <localcharset.h>
+ #else /* neither Mac OsX nor Android */
+
