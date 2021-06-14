@@ -19,11 +19,15 @@ if (VCPKG_TARGET_IS_WINDOWS)
       set(GEOS_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/geos_cd.lib")
       set(LIBXML2_LIBS_REL "${CURRENT_INSTALLED_DIR}/lib/libxml2.lib")
       set(LIBXML2_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/libxml2.lib")
+      set(LIBRTTOPO_LIBS_REL "${CURRENT_INSTALLED_DIR}/lib/librttopo.lib")
+      set(LIBRTTOPO_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/librttopo.lib")
   else()
       set(GEOS_LIBS_REL "${CURRENT_INSTALLED_DIR}/lib/geos_c.lib ${CURRENT_INSTALLED_DIR}/lib/geos.lib")
       set(GEOS_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/geos_cd.lib ${CURRENT_INSTALLED_DIR}/debug/lib/geosd.lib")
       set(LIBXML2_LIBS_REL "${CURRENT_INSTALLED_DIR}/lib/libxml2.lib ${CURRENT_INSTALLED_DIR}/lib/lzma.lib ws2_32.lib")
       set(LIBXML2_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/libxml2.lib ${CURRENT_INSTALLED_DIR}/debug/lib/lzmad.lib ws2_32.lib")
+      set(LIBRTTOPO_LIBS_REL "${CURRENT_INSTALLED_DIR}/lib/librttopo.lib")
+      set(LIBRTTOPO_LIBS_DBG "${CURRENT_INSTALLED_DIR}/debug/lib/librttopo.lib")
   endif()
 
   set(LIBS_ALL_DBG
@@ -81,13 +85,15 @@ if (VCPKG_TARGET_IS_WINDOWS)
       file(RENAME ${CURRENT_PACKAGES_DIR}/lib/spatialite_i.lib ${CURRENT_PACKAGES_DIR}/lib/spatialite.lib)
       file(RENAME ${CURRENT_PACKAGES_DIR}/debug/lib/spatialite_i.lib ${CURRENT_PACKAGES_DIR}/debug/lib/spatialite.lib)
   endif()
-elseif (VCPKG_TARGET_IS_LINUX OR VCPKG_TARGET_IS_OSX) # Build in UNIX
+else () # Build in UNIX
   if(VCPKG_TARGET_IS_LINUX)
       set(STDLIB stdc++)
   else()
       set(STDLIB c++)
   endif()
-
+  if(VCPKG_TARGET_IS_LINUX OR VCPKG_TARGET_IS_OSX)
+    SET(EXTRALIBS "-lpthtread")
+  endif()
   list(APPEND OPTIONS_RELEASE
       "LIBXML2_LIBS=-lxml2 -llzma"
       "GEOS_LDFLAGS=-lgeos_c -lgeos -l${STDLIB}"
@@ -101,8 +107,9 @@ elseif (VCPKG_TARGET_IS_LINUX OR VCPKG_TARGET_IS_OSX) # Build in UNIX
       SOURCE_PATH ${SOURCE_PATH}
       AUTOCONFIG
       OPTIONS
-          "LIBS=-lpthread -ldl -lm -l${STDLIB}"
+          "LIBS=${EXTRALIBS} -ldl -lm -l${STDLIB}"
           "LIBXML2_CFLAGS=-I\"${CURRENT_INSTALLED_DIR}/include\""
+          "--enable-rttopo"
           "--enable-gcp"
           "--enable-geocallbacks"
           "--disable-examples"
