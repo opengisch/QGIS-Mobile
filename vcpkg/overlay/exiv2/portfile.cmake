@@ -7,6 +7,8 @@ vcpkg_from_github(
     REF 194bb65ac568a5435874c9d9d73b1c8a68e4edec #v0.27.3
     SHA512 35a5a41e0a6cfe04d1ed005c8116ad4430516402b925db3d4f719e2385e2cfb09359eb7ab51853bc560138f221900778cd2e2d39f108c513b3e7d22dbb9bf503
     HEAD_REF master
+    PATCHES
+        ios.patch
 )
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
