@@ -12,7 +12,6 @@
       "libspatialindex",
       "libspatialite",
       "gdal",
-      "opencl",
       "exiv2",
       "gsl",
       "libpq",
@@ -40,6 +39,14 @@
     ],
     "features":
     [
+	{
+            "name": "opencl",
+            "description": "Should OpenCL support be added",
+            "dependencies":
+            [
+                "opencl"
+            ]
+	},
         {
             "name": "server",
             "description": "Determines whether QGIS server should be built",
