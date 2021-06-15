@@ -1,5 +1,6 @@
---- atialite-5-6ff71fc678.clean/src/gaiaaux/gg_utf8.c   2020-08-23 16:46:22.000000000 +0000
-+++ b/src/gaiaaux/gg_utf8.c     2021-06-14 23:22:31.000000000 +0000
+diff --color -ru a/src/gaiaaux/gg_utf8.c b/src/gaiaaux/gg_utf8.c
+--- a/src/gaiaaux/gg_utf8.c	2020-08-23 18:46:22.000000000 +0200
++++ b/src/gaiaaux/gg_utf8.c	2021-06-15 07:09:20.180762410 +0200
 @@ -73,7 +73,7 @@
  #include <localcharset.h>
  #endif /* end localcharset */
@@ -18,9 +19,9 @@
      return locale_charset ();
  #else /* neither Mac OsX nor Android */
      return nl_langinfo (CODESET);
-diff -ur atialite-5-6ff71fc678.clean/src/gaiageo/gg_shape.c b/src/gaiageo/gg_shape.c
---- atialite-5-6ff71fc678.clean/src/gaiageo/gg_shape.c  2020-08-23 16:46:22.000000000 +0000
-+++ b/src/gaiageo/gg_shape.c    2021-06-14 23:21:53.000000000 +0000
+diff --color -ru a/src/gaiageo/gg_shape.c b/src/gaiageo/gg_shape.c
+--- a/src/gaiageo/gg_shape.c	2020-08-23 18:46:22.000000000 +0200
++++ b/src/gaiageo/gg_shape.c	2021-06-15 07:09:20.182762418 +0200
 @@ -71,7 +71,7 @@
  #include <localcharset.h>
  #endif /* end localcharset */
@@ -30,4 +31,3 @@ diff -ur atialite-5-6ff71fc678.clean/src/gaiageo/gg_shape.c b/src/gaiageo/gg_sha
  #include <iconv.h>
  #include <localcharset.h>
  #else /* neither Mac OsX nor Android */
-
