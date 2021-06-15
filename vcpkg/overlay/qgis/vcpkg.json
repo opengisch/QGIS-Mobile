@@ -19,6 +19,10 @@
       "protobuf",
       "proj4",
       "geos",
+      {
+        "name": "libtasn1",
+	"platform": "ios"
+      },
       "qt5-base",
       "qt5-svg",
       "qt5-location",

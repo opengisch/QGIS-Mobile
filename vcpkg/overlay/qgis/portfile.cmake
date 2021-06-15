@@ -195,6 +195,10 @@ else() # Build in UNIX
     endif()
 endif()
 
+if(VCPKG_TARGET_IS_IOS)
+    list(APPEND QGIS_OPTIONS -DWITH_QT5SERIALPORT=FALSE)
+endif()
+
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
     #PREFER_NINJA
