@@ -1,5 +1,15 @@
+From e932e57c04a8e2af39624f1207c9411eb0e976db Mon Sep 17 00:00:00 2001
+From: root <you@example.com>
+Date: Tue, 15 Jun 2021 21:33:43 +0000
+Subject: [PATCH] No console
+
+---
+ include/QtCrypto/qca_support.h | 430 ---------------------------------
+ src/CMakeLists.txt             |  42 ++--
+ 2 files changed, 21 insertions(+), 451 deletions(-)
+
 diff --git a/include/QtCrypto/qca_support.h b/include/QtCrypto/qca_support.h
-index 9f5d364..544de0d 100644
+index 8e46bb7..2de8830 100644
 --- a/include/QtCrypto/qca_support.h
 +++ b/include/QtCrypto/qca_support.h
 @@ -497,436 +497,6 @@ private:
@@ -105,8 +115,8 @@ index 9f5d364..544de0d 100644
 -	   you to test whether there is already a Console object of the 
 -	   required Type, and if there is, obtain a reference to that object.
 -	*/
--	Console(Type type, ChannelMode cmode, TerminalMode tmode, QObject *parent = 0);
--	~Console();
+-	Console(Type type, ChannelMode cmode, TerminalMode tmode, QObject *parent = nullptr);
+-	~Console() override;
 -
 -	/**
 -	   The Type of this Console object
@@ -208,8 +218,8 @@ index 9f5d364..544de0d 100644
 -
 -	   \param parent the parent object for this object
 -	*/
--	ConsoleReference(QObject *parent = 0);
--	~ConsoleReference();
+-	ConsoleReference(QObject *parent = nullptr);
+-	~ConsoleReference() override;
 -
 -	/**
 -	   Set the Console object to be managed, and start processing.
@@ -370,8 +380,8 @@ index 9f5d364..544de0d 100644
 -
 -	   \param parent the parent object for this object
 -	*/
--	ConsolePrompt(QObject *parent = 0);
--	~ConsolePrompt();
+-	ConsolePrompt(QObject *parent = nullptr);
+-	~ConsolePrompt() override;
 -
 -	/**
 -	   Allow the user to enter data without it being echo'd to 
@@ -438,4 +448,74 @@ index 9f5d364..544de0d 100644
 -};
  
  class AbstractLogDevice;
+ 
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 7066839..85ae0d7 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -44,7 +44,7 @@ SET( SOURCES
+ 	qca_securelayer.cpp
+ 	qca_securemessage.cpp
+ 	support/qpipe.cpp
+-	support/console.cpp
++	#	support/console.cpp
+ 	support/synchronizer.cpp
+ 	support/dirwatch.cpp
+ 	support/syncthread.cpp
+@@ -52,8 +52,8 @@ SET( SOURCES
+ 
+ IF (WIN32)
+   SET( SOURCES ${SOURCES} qca_systemstore_win.cpp )
+-elseif(APPLE)
+-  set( SOURCES ${SOURCES} qca_systemstore_mac.cpp)
++  #elseif(APPLE)
++  #  set( SOURCES ${SOURCES} qca_systemstore_mac.cpp)
+ else()
+   SET( SOURCES ${SOURCES} qca_systemstore_flatfile.cpp )
+ endif()
+@@ -130,24 +130,24 @@ if(WIN32)
+ 	TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} crypt32 ws2_32)
+ endif()
+ 
+-if(APPLE)
+-  set(COREFOUNDATION_LIBRARY "-framework CoreFoundation")
+-  set(COREFOUNDATION_LIBRARY_SECURITY "-framework Security")
+-  TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} ${COREFOUNDATION_LIBRARY} ${COREFOUNDATION_LIBRARY_SECURITY})
+-
+-  if(NOT USE_RELATIVE_PATHS)
+-    set_target_properties(${QCA_LIB_NAME} PROPERTIES
+-                          INSTALL_NAME_DIR "${QCA_LIBRARY_INSTALL_DIR}"
+-    )
+-  endif()
+-endif()
+-
+-if(NOT ANDROID)
+-  set_target_properties(${QCA_LIB_NAME} PROPERTIES
+-                        VERSION ${QCA_LIB_MAJOR_VERSION}.${QCA_LIB_MINOR_VERSION}.${QCA_LIB_PATCH_VERSION}
+-                        SOVERSION ${QCA_LIB_MAJOR_VERSION}
+-                        )
+-endif()
++#if(APPLE)
++#  set(COREFOUNDATION_LIBRARY "-framework CoreFoundation")
++#  set(COREFOUNDATION_LIBRARY_SECURITY "-framework Security")
++#  TARGET_LINK_LIBRARIES(${QCA_LIB_NAME} ${COREFOUNDATION_LIBRARY} ${COREFOUNDATION_LIBRARY_SECURITY})
++#
++#  if(NOT USE_RELATIVE_PATHS)
++#    set_target_properties(${QCA_LIB_NAME} PROPERTIES
++#                          INSTALL_NAME_DIR "${QCA_LIBRARY_INSTALL_DIR}"
++#    )
++#  endif()
++#endif()
++
++#if(NOT ANDROID)
++#  set_target_properties(${QCA_LIB_NAME} PROPERTIES
++#                        VERSION ${QCA_LIB_MAJOR_VERSION}.${QCA_LIB_MINOR_VERSION}.${QCA_LIB_PATCH_VERSION}
++#                        SOVERSION ${QCA_LIB_MAJOR_VERSION}
++#                        )
++#endif()
+ 
+ set_target_properties(${QCA_LIB_NAME} PROPERTIES
+                       DEFINE_SYMBOL QCA_MAKEDLL
+-- 
+2.25.1
 
