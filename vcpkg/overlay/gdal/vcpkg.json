@@ -10,6 +10,10 @@
     "expat",
     "geos",
     "giflib",
+    {
+      "name": "json-c",
+      "platform": "!windows"
+    },
     "libgeotiff",
     "liblzma",
     "libpng",
@@ -38,11 +42,7 @@
     "hdf5": {
       "description": "Support for HDF5",
       "dependencies": [
-        "hdf5",
-        {
-          "name": "json-c",
-          "platform": "!windows"
-        }
+        "hdf5"
       ]
     },
     "netcdf": {
