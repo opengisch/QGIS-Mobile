@@ -196,10 +196,9 @@ else() # Build in UNIX
         list(APPEND QGIS_OPTIONS_DEBUG -DPoly2Tri_LIBRARY:PATH=${CURRENT_INSTALLED_DIR}/debug/lib/libqt_poly2tri_debug.a) # static qt only
         list(APPEND QGIS_OPTIONS_RELEASE -DPoly2Tri_LIBRARY:PATH=${CURRENT_INSTALLED_DIR}/lib/libqt_poly2tri.a) # static qt only
     endif()
-    if(VCPKG_TARGET_IS_OSX) 
-        list(APPEND QGIS_OPTIONS -DQGIS_MACAPP_FRAMEWORK=FALSE)
-    endif()
 endif()
+
+list(APPEND QGIS_OPTIONS -DQGIS_MACAPP_FRAMEWORK=FALSE)
 
 if(VCPKG_TARGET_IS_IOS)
     list(APPEND QGIS_OPTIONS -DWITH_QT5SERIALPORT=FALSE)
