@@ -185,7 +185,7 @@ jobs:
           echo $(brew --prefix flex)/bin >> $GITHUB_PATH
           # Only macos (?), not ios
           #          echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=-lldap" >> $GITHUB_ENV
-          [[ "${{ matrix.triplet }}" == "arm64-ios" ]] && echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=/Users/runner/builddir/vcpkg_installed/arm64-ios/lib/qca.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpq.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgport.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgcommon.a" >> $GITHUB_ENV
+          [[ "${{ matrix.triplet }}" == "arm64-ios" ]] && echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=/Users/runner/builddir/vcpkg_installed/arm64-ios/lib/qca.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpq.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgport.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgcommon.a /Applications/Xcode_12.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/usr/lib/libiconv.tb" >> $GITHUB_ENV
           sudo xcode-select -s /Applications/Xcode_12.app/Contents/Developer
 
       - name: Install dependencies and generate project files
