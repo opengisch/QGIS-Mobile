@@ -203,6 +203,7 @@ endif()
 
 if(VCPKG_TARGET_IS_IOS)
     list(APPEND QGIS_OPTIONS -DWITH_QT5SERIALPORT=FALSE)
+    list(APPEND QGIS_OPTIONS -DWITH_AUTH=FALSE) # Trying to link shared libs will fail on ios because https://gist.github.com/agirault/3244bf956c2cad7217b148291135f85e (2.3)
 endif()
 
 vcpkg_configure_cmake(
