@@ -202,22 +202,12 @@ jobs:
           echo "Building with $(IFS=\; ; echo "${overlay_ports[*]}")"
           cmake -S "${SOURCE_DIR}" -B "${CMAKE_BUILD_DIR}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" -DWITH_VCPKG=ON -DUSE_MAC_BUNDLING=OFF
 
-      - name: Setup tmate session
-        if: always()
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: true
-
       - name: Upload Build Logs
         uses: actions/upload-artifact@v2
-        if: always()
+        if: failure()
         with:
           name: build-logs-${{ matrix.triplet }}
           path: ${{ env.VCPKG_ROOT }}/buildtrees/**/*.log
-
-            #      - name: Setup tmate session
-            #        if: always()
-            #        uses: mxschmitt/action-tmate@v3
 
       - name: 🌍 Pull Translations
         shell: bash
@@ -235,6 +225,12 @@ jobs:
       - name: Build
         run: |
           cmake --build "${{ env.CMAKE_BUILD_DIR }}"
+
+      - name: Setup tmate session
+        if: failure()
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: true
 
       # - name: Test
       #  run: |
