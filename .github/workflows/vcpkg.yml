@@ -164,7 +164,7 @@ jobs:
         if: ${{ matrix.install_qt }}
         uses: jurplel/install-qt-action@v2
         with:
-          version: 5.14.2
+          version: 5.15.2
           modules: 'qtcharts'
           target: ${{ matrix.qt_target }}
           arch: ${{ matrix.qt_arch }}
