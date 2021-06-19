@@ -203,7 +203,7 @@ jobs:
           cmake -S "${SOURCE_DIR}" -B "${CMAKE_BUILD_DIR}" -GNinja -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" -DWITH_VCPKG=ON -DUSE_MAC_BUNDLING=OFF
 
       - name: Build take 2
-        if failure()
+        if: failure()
         run: |
           wget https://raw.githubusercontent.com/OlivierLDff/IosCMakeToolchain/master/ios.toolchain.cmake
           cmake -DCMAKE_PREFIX_PATH=${CMAKE_BUILD_DIR}/vcpkg_installed/${{ matrix.triplet }} \
