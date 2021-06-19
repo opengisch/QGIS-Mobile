@@ -202,7 +202,7 @@ jobs:
           echo "Building with $(IFS=\; ; echo "${overlay_ports[*]}")"
           wget https://raw.githubusercontent.com/OlivierLDff/IosCMakeToolchain/master/ios.toolchain.cmake
           cmake -S "${SOURCE_DIR}" -B "${CMAKE_BUILD_DIR}" -GXcode -DCMAKE_BUILD_TYPE=${{ matrix.build-type }} -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" -DVCPKG_OVERLAY_PORTS=$(IFS=\; ; echo "${overlay_ports[*]}") -DVCPKG_TARGET_TRIPLET="${{ matrix.triplet }}" -DWITH_VCPKG=ON -DUSE_MAC_BUNDLING=OFF -DDEPLOYMENT_TARGET=12.0 \
-            -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=ios.toolchain.cmake \
+            -DVCPKG_CHAINLOAD_TOOLCHAIN_FILE=$(pwd)/ios.toolchain.cmake \
             -DPLATFORM=OS64COMBINED \
             -DENABLE_BITCODE=FALSE 
 
