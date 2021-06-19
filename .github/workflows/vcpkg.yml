@@ -212,7 +212,7 @@ jobs:
           wget https://raw.githubusercontent.com/OlivierLDff/IosCMakeToolchain/master/ios.toolchain.cmake
           cmake -DCMAKE_PREFIX_PATH=${CMAKE_BUILD_DIR}/vcpkg_installed/${{ matrix.triplet }} \
             -DDEPLOYMENT_TARGET=12.0 \
-            -DCMAKE_TOOLCHAIN_FILE=ios.toolchain.cmake \
+            -DCMAKE_TOOLCHAIN_FILE=$(pwd)/ios.toolchain.cmake \
             -DPLATFORM=OS64COMBINED \
             -DENABLE_BITCODE=FALSE \
             -G "Xcode" \
