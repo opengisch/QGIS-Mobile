@@ -188,6 +188,20 @@ jobs:
           [[ "${{ matrix.triplet }}" == "arm64-ios" ]] && echo "CMAKE_EXTRA_CXX_STANDARD_LIBRARIES=/Users/runner/builddir/vcpkg_installed/arm64-ios/lib/qca.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpq.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgport.a /Users/runner/builddir/vcpkg_installed/arm64-ios/lib/libpgcommon.a /Applications/Xcode_12.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.0.sdk/usr/lib/libiconv.tbd" >> $GITHUB_ENV
           sudo xcode-select -s /Applications/Xcode_12.app/Contents/Developer
 
+      - uses: Apple-Actions/import-codesign-certs@v1
+        if: ${{ matrix.triplet == 'arm64-ios' }}
+        with:
+          p12-file-base64: ${{ secrets.IOS_CERTIFICATES_FILE_BASE64 }}
+          p12-password: ${{ secrets.IOS_CERTIFICATES_PASSWORD }}
+
+      - uses: Apple-Actions/download-provisioning-profiles@v1
+        if: ${{ matrix.triplet == 'arm64-ios' }}
+        with:
+          bundle-id: ch.opengis.qfield
+          issuer-id: ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
+          api-key-id: ${{ secrets.IOS_APPSTORE_KEY_ID }}
+        api-private-key: ${{ secrets.IOS_APPSTORE_PRIVATE_KEY }}
+
       - name: Install dependencies and generate project files
         shell: bash
         env:
@@ -243,7 +257,7 @@ jobs:
 
       - name: Build
         run: |
-          cmake --build "${{ env.CMAKE_BUILD_DIR }}"
+          cmake --build "${{ env.CMAKE_BUILD_DIR }}" --target qfield
 
       - name: Setup tmate session
         if: failure()
