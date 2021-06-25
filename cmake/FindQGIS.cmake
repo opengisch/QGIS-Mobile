@@ -213,7 +213,7 @@ ELSE(WIN32)
       qgis_core_link_library(protobuf TRUE)
       qgis_core_link_library(protoc TRUE)
       qgis_core_link_library(qt5keychain TRUE)
-      qgis_core_link_library(qca-qt5 TRUE)
+      qgis_core_link_library(qca TRUE)
       qgis_core_link_library(spatialindex TRUE)
       qgis_core_link_library(spatialite TRUE)
       qgis_core_link_library(tasn1 TRUE)
@@ -222,6 +222,7 @@ ELSE(WIN32)
       find_library(QGIS_WSMPROVIDER_PLUGIN_LIBRARY wmsprovider_a
         PATH_SUFFIXES
          QGIS.app/Contents/PlugIns/qgis/
+	 qgis/plugins
       )
       if(QGIS_WSMPROVIDER_PLUGIN_LIBRARY)
         message(STATUS "Link ${QGIS_WSMPROVIDER_PLUGIN_LIBRARY} interface to qgis_core")
@@ -233,6 +234,7 @@ ELSE(WIN32)
       find_library(QGIS_POSTGRESPROVIDER_PLUGIN_LIBRARY postgresprovider_a
         PATH_SUFFIXES
          QGIS.app/Contents/PlugIns/qgis/
+	 qgis/plugins
       )
       if(QGIS_POSTGRESPROVIDER_PLUGIN_LIBRARY)
         message(STATUS "Link ${QGIS_POSTGRESPROVIDER_PLUGIN_LIBRARY} interface to qgis_core")
@@ -244,6 +246,7 @@ ELSE(WIN32)
       find_library(QGIS_POSTGRESRASTERPROVIDER_PLUGIN_LIBRARY postgresrasterprovider_a
         PATH_SUFFIXES
          QGIS.app/Contents/PlugIns/qgis/
+	 qgis/plugins
       )
       if(QGIS_POSTGRESRASTERPROVIDER_PLUGIN_LIBRARY)
         message(STATUS "Link ${QGIS_POSTGRESRASTERPROVIDER_PLUGIN_LIBRARY} interface to qgis_core")
@@ -267,7 +270,6 @@ ELSE(WIN32)
       target_link_libraries(qgis_analysis INTERFACE ${QGIS_ANALYSIS_LIBRARY} qgis_core)
 
       qgis_analysis_link_library(exiv2 TRUE)
-      qgis_analysis_link_library(exiv2-xmp TRUE)
 
       target_include_directories(qgis_analysis INTERFACE ${QGIS_ANALYSIS_INCLUDE_DIR})
 
@@ -275,7 +277,7 @@ ELSE(WIN32)
       set(QGIS_CORE_LIBRARY qgis_core)
       set(QGIS_ANALYSIS_LIBRARY qgis_analysis)
 
-      find_file(PROJ_DB proj.db PATHS ${CMAKE_PREFIX_PATH} PATH_SUFFIXES share/proj REQUIRED)
+      find_file(PROJ_DB proj.db PATHS ${CMAKE_PREFIX_PATH} PATH_SUFFIXES share/proj share/proj4 REQUIRED)
       get_filename_component(QFIELD_PROJ_DIR ${PROJ_DB} DIRECTORY)
       message("Found Proj DB directory: " ${QFIELD_PROJ_DIR})
 
