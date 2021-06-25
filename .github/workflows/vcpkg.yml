@@ -200,7 +200,7 @@ jobs:
           bundle-id: ch.opengis.qfield
           issuer-id: ${{ secrets.IOS_APPSTORE_ISSUER_ID }}
           api-key-id: ${{ secrets.IOS_APPSTORE_KEY_ID }}
-        api-private-key: ${{ secrets.IOS_APPSTORE_PRIVATE_KEY }}
+          api-private-key: ${{ secrets.IOS_APPSTORE_PRIVATE_KEY }}
 
       - name: Install dependencies and generate project files
         shell: bash
