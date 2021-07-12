@@ -22,9 +22,8 @@ import java.text.SimpleDateFormat;
 
 public class QFieldOpenExternallyActivity extends Activity{
     private static final String TAG = "QField Open (file) Externally Activity";
-    private String filePath;
-    private String mimeType;
-    private String tempFileName;
+    private File file;
+    private File cacheFile;
     private String errorMessage;
 
     @Override
@@ -32,12 +31,12 @@ public class QFieldOpenExternallyActivity extends Activity{
         Log.d(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
 
-        filePath = getIntent().getExtras().getString("filepath");
-        mimeType = getIntent().getExtras().getString("filetype");
+        String filePath = getIntent().getExtras().getString("filepath");
+        String mimeType = getIntent().getExtras().getString("filetype");
         Log.d(TAG, "Received filepath: " + filePath + " and mimeType: " + mimeType);
 
-        File file = new File(filePath);
-        File cacheFile = new File(getCacheDir(), file.getName());
+        file = new File(filePath);
+        cacheFile = new File(getExternalCacheDir(), file.getName());
 
         //copy file to a temporary file
         try{
@@ -50,28 +49,24 @@ public class QFieldOpenExternallyActivity extends Activity{
         Uri contentUri =  Build.VERSION.SDK_INT < 24 ? Uri.fromFile(file) : FileProvider.getUriForFile( this, BuildConfig.APPLICATION_ID+".fileprovider", cacheFile );
 
         Log.d(TAG, "content URI: " + contentUri);
-        Log.d(TAG, "call ACTION_VIEW intent");
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
+        Log.d(TAG, "call ACTION_EDIT intent");
+        Intent intent = new Intent(Intent.ACTION_EDIT);
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.setDataAndType(contentUri, mimeType);
-        try{
-            startActivityForResult(intent, 102);
-        }catch (Exception e) {
-            Log.d(TAG, e.getMessage());
-            errorMessage = e.getMessage();
-        }
+        intent.setDataAndType(contentUri, "image/*");
+        startActivity(Intent.createChooser(intent, null));
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) 
     {
-      //on ACTION_VIEW back key pressed it returns RESULT_CANCEL - on error as well
-      if (resultCode == RESULT_OK) {
+      // copy temporary file back
+      try{
+          copyFile( cacheFile, file );
           Intent intent = this.getIntent();
           setResult(RESULT_OK, intent);
-      } else {
+      }catch(IOException e){
           Intent intent = this.getIntent();
+          Log.d(TAG, e.getMessage());
           intent.putExtra("ERROR_MESSAGE", errorMessage);
           setResult(RESULT_CANCELED, intent);
       }
