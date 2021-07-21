@@ -323,7 +323,11 @@ bool FeatureModel::setData( const QModelIndex &index, const QVariant &value, int
 
       bool success = mFeature.setAttribute( index.row(), val );
       if ( success )
+      {
         emit dataChanged( index, index, QVector<int>() << role );
+        // emit a feature changed signal so the attribute form's currentFeature has up-to-date values
+        emit featureChanged();
+      }
       return success;
     }
 

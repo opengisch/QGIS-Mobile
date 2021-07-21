@@ -114,6 +114,7 @@ bool AttributeFormModelBase::setData( const QModelIndex &index, const QVariant &
           item->setData( value, AttributeFormModel::AttributeValue );
           emit dataChanged( index, index, QVector<int>() << role );
         }
+        updateDefaultValues( fieldIndex );
         updateVisibilityAndConstraints( fieldIndex );
         return changed;
       }
@@ -358,7 +359,8 @@ void AttributeFormModelBase::flatten( QgsAttributeEditorContainer *container, QS
 
         item->setData( currentTabIndex, AttributeFormModel::TabIndex );
         item->setData( mLayer->attributeDisplayName( fieldIndex ), AttributeFormModel::Name );
-        item->setData( !mLayer->editFormConfig().readOnly( fieldIndex ), AttributeFormModel::AttributeEditable );
+        item->setData( !mLayer->editFormConfig().readOnly( fieldIndex ) &&
+                       !( field.defaultValueDefinition().isValid() && field.defaultValueDefinition().applyOnUpdate() ), AttributeFormModel::AttributeEditable );
         const QgsEditorWidgetSetup setup = findBest( fieldIndex );
         item->setData( setup.type(), AttributeFormModel::EditorWidget );
         item->setData( setup.config(), AttributeFormModel::EditorWidgetConfig );
@@ -479,6 +481,38 @@ void AttributeFormModelBase::flatten( QgsAttributeEditorContainer *container, QS
       case QgsAttributeEditorElement::AeTypeInvalid:
         // todo
         break;
+    }
+  }
+}
+
+void AttributeFormModelBase::updateDefaultValues( int fieldIndex )
+{
+  const QgsFields fields = mFeatureModel->feature().fields();
+  const QString fieldName = fields.at( fieldIndex ).name();
+
+  mExpressionContext.setFields( fields );
+  mExpressionContext.setFeature( mFeatureModel->feature() );
+
+  QMap<QStandardItem *, QgsFieldConstraints>::ConstIterator constraintIterator( mConstraints.constBegin() );
+  for ( ; constraintIterator != mConstraints.constEnd(); ++constraintIterator )
+  {
+    QStandardItem *item = constraintIterator.key();
+    int fidx = item->data( AttributeFormModel::FieldIndex ).toInt();
+    if ( fidx == fieldIndex || !fields.at( fidx ).defaultValueDefinition().isValid() || !fields.at( fidx ).defaultValueDefinition().applyOnUpdate() )
+      continue;
+
+    QgsExpression exp( fields.at( fidx ).defaultValueDefinition().expression() );
+    exp.prepare( &mExpressionContext );
+
+    // avoid cost of value update if expression doesn't contain the field which triggered the default values update
+    if ( !exp.referencedColumns().contains( fieldName ) )
+      continue;
+
+    QVariant defaultValue = exp.evaluate( &mExpressionContext );
+    bool changed = mFeatureModel->setData( mFeatureModel->index( fidx ), defaultValue, FeatureModel::AttributeValue );
+    if ( changed )
+    {
+      item->setData( defaultValue, AttributeFormModel::AttributeValue );
     }
   }
 }
