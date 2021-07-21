@@ -34,7 +34,7 @@ EditorWidgetBase {
     enabled: isEnabled
 
     property bool isDateTimeType: field.isDateOrTime
-    property bool fieldIsDate: platformUtilities.fieldType( field ) === 'QDate'
+    property bool fieldIsDate: LayerUtils.fieldType( field ) === 'QDate'
     property var currentValue: isDateTimeType ? value : Qt.formatDateTime(value, config['field_format'])
 
 

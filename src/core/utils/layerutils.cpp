@@ -106,3 +106,8 @@ void LayerUtils::selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> 
     qgsFids << fid;
   layer->selectByIds( qgsFids, behavior );
 }
+
+QString LayerUtils::fieldType( const QgsField &field ) const
+{
+  return QVariant( field.type() ).typeName();
+}

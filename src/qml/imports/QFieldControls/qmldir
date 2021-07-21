@@ -1,0 +1,3 @@
+module QFieldControls
+TextEdit 1.0 ../../editorwidgets/TextEdit.qml
+Range 1.0 ../../editorwidgets/Range.qml

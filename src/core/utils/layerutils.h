@@ -57,6 +57,12 @@ class LayerUtils : public QObject
 #else
     static Q_INVOKABLE void selectFeaturesInLayer( QgsVectorLayer *layer, const QList<int> &fids, QgsVectorLayer::SelectBehavior behavior = QgsVectorLayer::SetSelection );
 #endif
+
+    /**
+     * Returns the QVariant typeName of a \a field.
+     * This is a stable identifier (compared to the provider field name).
+     */
+    Q_INVOKABLE QString fieldType( const QgsField &field ) const;
 };
 
 #endif // LAYERUTILS_H

@@ -145,7 +145,8 @@ if (ANDROID)
 endif()
 
 set(QT_MIN_VERSION 5.14.0)
-find_package(Qt5 COMPONENTS Test Concurrent Core Qml Gui Xml Positioning Widgets Network Quick Svg OpenGL Sql Sensors WebView Bluetooth REQUIRED)
+find_package(Qt5 COMPONENTS Concurrent Core Qml Gui Xml Positioning Widgets Network Quick Svg OpenGL Sql Sensors WebView Bluetooth REQUIRED)
+
 # PrintSupport isn't required, because it doesn't exist for ios
 # qgis will deal with it an define a public 'QT_NO_PRINTER'
 find_package(Qt5 COMPONENTS PrintSupport QUIET)
@@ -175,6 +176,7 @@ if (${CMAKE_SYSTEM_NAME} STREQUAL "iOS")
 endif()
 
 set (ENABLE_TESTS TRUE CACHE BOOL "Build unit tests?")
+
 if(MSVC)
   find_package(Qt5 COMPONENTS Charts REQUIRED) # vcpkg doesn't include QtCharts.dll as dep of the qml module otherwise
   add_definitions(-D_USE_MATH_DEFINES)
@@ -184,7 +186,9 @@ endif()
 add_subdirectory(3rdparty/tessellate)
 add_subdirectory(src/core)
 add_subdirectory(src/app)
+
 if (ENABLE_TESTS)
+  find_package(Qt5 COMPONENTS Test QuickTest)
   enable_testing()
   add_subdirectory(test)
 endif()

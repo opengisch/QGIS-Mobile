@@ -92,12 +92,6 @@ class QFIELD_CORE_EXPORT PlatformUtilities : public QObject
     Q_INVOKABLE virtual ViewStatus *open( const QString &uri );
 
     /**
-     * Returns the QVariant typeName of a \a field.
-     * This is a stable identifier (compared to the provider field name).
-     */
-    Q_INVOKABLE QString fieldType( const QgsField &field ) const;
-
-    /**
      * Indicates the system that we want to open a project.
      * The system shall show a suitable user interface element (like a filebrowser)
      * to let the user select a project.
