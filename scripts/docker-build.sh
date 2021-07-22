@@ -64,6 +64,7 @@ fi
 if [[ "X${APP_PACKAGE_NAME}" != "Xqfield" ]]; then
   grep "ch.opengis.qfield" -l -r ${SOURCE_DIR}/android/ | xargs sed -i "s/ch.opengis.qfield/ch.opengis.${APP_PACKAGE_NAME}/g"
   grep "ch\.opengis\.qfield" -l -r ${SOURCE_DIR}/src/ | xargs sed -i "s/ch\.opengis\.qfield/ch.opengis.${APP_PACKAGE_NAME}/g"
+  grep "ch\/opengis\/qfield" -l -r ${SOURCE_DIR}/src/ | xargs sed -i "s/ch\/opengis\/qfield/ch\/opengis\/${APP_PACKAGE_NAME}/g"
   sed -i "s/ch_opengis_qfield/ch_opengis_${APP_PACKAGE_NAME//_/_1}/g" ${SOURCE_DIR}/src/core/platforms/android/androidplatformutilities.cpp
   mv ${SOURCE_DIR}/android/src/ch/opengis/qfield ${SOURCE_DIR}/android/src/ch/opengis/${APP_PACKAGE_NAME}
   sed -i "s|<string name=\"app_name\" translatable=\"false\">QField</string>|<string name=\"app_name\" translatable=\"false\">${APP_NAME}</string>|" ${SOURCE_DIR}/android/res/values/strings.xml
