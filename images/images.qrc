@@ -456,5 +456,6 @@
         <file>themes/qfield/nodpi/ic_chevron_down.svg</file>
         <file>themes/qfield/nodpi/ic_chevron_up.svg</file>
         <file>themes/qfield/nodpi/ic_arrow_left_white_24dp.svg</file>
+        <file>themes/qfield/nodpi/north_arrow.svg</file>
     </qresource>
 </RCC>

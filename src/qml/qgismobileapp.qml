@@ -21,6 +21,7 @@ import QtGraphicalEffects 1.0
 import Qt.labs.settings 1.0 as LabSettings
 import QtQml 2.12
 import QtPositioning 5.12
+import QtSensors 5.12
 
 import org.qgis 1.0
 import org.qfield 1.0
@@ -748,6 +749,18 @@ ApplicationWindow {
     samples: 17
     color: "#66212121"
     source: locatorItem
+  }
+
+  Image {
+    Magnetometer {
+      id: mag
+      active: true
+      returnGeoValues: false
+    }
+    source: Theme.getThemeVectorIcon( 'north_arrow' )
+    x: (root.width - width)/2
+    y: (root.height - height)/2
+    rotation: ((Math.atan2(mag.x, mag.y) / Math.PI) * 180)
   }
 
   DashBoard {
