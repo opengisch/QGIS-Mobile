@@ -39,6 +39,11 @@
 
 #ifdef ANDROID
 #include <android/log.h>
+
+#include <QtAndroid>
+#include <QAndroidJniObject>
+#include <QAndroidJniEnvironment>
+
 const char *const applicationName = "QField";
 void qfMessageHandler( QtMsgType type, const QMessageLogContext &context, const QString &msg )
 {
@@ -110,6 +115,11 @@ int main( int argc, char **argv )
   app.setPrefixPath( "" QGIS_INSTALL_DIR, true );
   app.setPluginPath( PlatformUtilities::instance()->systemGenericDataLocation() + QStringLiteral( "/plugins" ) );
   app.setPkgDataPath( PlatformUtilities::instance()->systemGenericDataLocation() + QStringLiteral( "/qgis" ) );
+
+  QAndroidJniObject::callStaticMethod<void>( "ch/opengis/qfield/QFieldService",
+                                             "startQFieldService",
+                                             "(Landroid/content/Context;)V",
+                                             QtAndroid::androidActivity().object() );
 #elif defined( Q_OS_IOS )
   QString projPath = PlatformUtilities::instance()->systemGenericDataLocation() + QStringLiteral( "/proj" );
   qputenv( "PROJ_LIB", projPath.toUtf8() );
