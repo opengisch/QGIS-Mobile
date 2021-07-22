@@ -219,6 +219,13 @@
         </meta-data>
     </provider>
 
+    <service android:process=":qt" android:name="ch.opengis.@APP_PACKAGE_NAME@.QFieldService">
+      <meta-data android:name="android.app.lib_name" android:value="qfield_service"/>
+      <!-- Background running -->
+      <meta-data android:name="android.app.background_running" android:value="true"/>
+      <!-- Background running -->
+    </service>
+
   </application>
   <uses-sdk android:minSdkVersion="@ANDROID_PLATFORM@" android:targetSdkVersion="@ANDROID_TARGET_PLATFORM@" />
   <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
